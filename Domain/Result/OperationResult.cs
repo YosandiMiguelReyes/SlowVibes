@@ -1,9 +1,9 @@
 ﻿namespace Domain.Result
 {
-    public class OperationResult<Tresult>
+    public class OperationResult<T>
     {
-        public Tresult Data { get; set; }
-        public bool Success { get; set; }
+        public T Data { get; set; }
+        public bool IsSuccess { get; set; }
         public string Message { get; set; }
     }
 }
