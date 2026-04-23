@@ -5,7 +5,7 @@ using System.Text;
 
 namespace Domain.Entities.Settings
 {
-    public class Settings : BaseEntity<int>
+    public class Setting : BaseEntity<int>
     {
         public string Key { get; set; }
         public string Value { get; set; }
