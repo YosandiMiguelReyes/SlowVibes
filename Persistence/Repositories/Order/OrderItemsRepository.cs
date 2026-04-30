@@ -6,7 +6,7 @@ using Persistence.Interfaces.Order;
 
 namespace Persistence.Repositories.Order
 {
-    public class OrderItemsRepository : BaseRepository<OrderItems, int>, IOrderItems
+    public class OrderItemsRepository : BaseRepository<OrderItems, int>, IOrderItemsRepository
     {
         public Task<IEnumerable<OrderItems>> GetOrderItemsByOrderIdAsync(int orderId)
         {

@@ -3,7 +3,7 @@ using Domain.Repositories;
 
 namespace Persistence.Interfaces.Order
 {
-    public interface IOrderItems : IBaseRepository<OrderItems, int>
+    public interface IOrderItemsRepository : IBaseRepository<OrderItems, int>
     {
         Task<IEnumerable<OrderItems>> GetOrderItemsByOrderIdAsync(int orderId);
     }

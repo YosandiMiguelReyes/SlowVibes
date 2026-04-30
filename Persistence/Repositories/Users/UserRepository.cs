@@ -1,35 +1,31 @@
 ﻿using Domain.Entities.User;
 using Domain.Repositories;
 using Persistence.BaseRepository;
+using Persistence.Context;
 using Persistence.Interfaces.Users;
 using System.Linq.Expressions;
 
 
 namespace Persistence.Repositories.Users
 {
-    public class UserRepository : BaseRepository<User, int>, IUserRepository
+    public class UserRepository : BaseRepository<Domain.Entities.User.Users, int>, IUserRepository
     {
-        public Task AddAsync(User entity)
+        public UserRepository(SlowVibesDbContext context) : base (context)
+        {
+            
+        }
+
+        public Task<Domain.Entities.User.Users?> GetByCredentialsWithRolesAsync(string identifier)
         {
             throw new NotImplementedException();
         }
 
-        public void Delete(User entity)
+        public Task<IEnumerable<Domain.Entities.User.Users>> GetUsersByRoleAsync(string roleName)
         {
             throw new NotImplementedException();
         }
 
-        public Task<IEnumerable<User>> FindAsync(Expression<Func<User, bool>> predicate)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task<User?> GetByCredentialsWithRolesAsync(string identifier)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task<IEnumerable<User>> GetUsersByRoleAsync(string roleName)
+        public Task<IEnumerable<Domain.Entities.User.Users>> GetUsersByStatusAsync(bool status)
         {
             throw new NotImplementedException();
         }
@@ -44,22 +40,7 @@ namespace Persistence.Repositories.Users
             throw new NotImplementedException();
         }
 
-        public void Update(User entity)
-        {
-            throw new NotImplementedException();
-        }
-
         public Task UpdateStatusAsync(int userId, bool isActive)
-        {
-            throw new NotImplementedException();
-        }
-
-        Task<IEnumerable<User>> IBaseRepository<User, int>.GetAllAsync()
-        {
-            throw new NotImplementedException();
-        }
-
-        Task<User> IBaseRepository<User, int>.GetAsync(int id)
         {
             throw new NotImplementedException();
         }

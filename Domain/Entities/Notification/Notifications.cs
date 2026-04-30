@@ -3,7 +3,7 @@ using Domain.Interfaces;
 
 namespace Domain.Entities.Notification
 {
-    public class Notification : BaseEntity<int>, ICreatedAt
+    public class Notifications : BaseEntity<int>, ICreatedAt
     {
         public string? Type { get; set; } //max 20 characters
         public string? Recipient { get; set; } //max 150 characters

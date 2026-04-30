@@ -1,4 +1,5 @@
 <Solution>
   <Project Path="Domain/Domain.csproj" Id="87f0037a-7af2-43a6-8449-451bdb62a670" />
   <Project Path="Persistence/Persistence.csproj" Id="77785e48-2be0-411c-ab22-0cd834edb7c4" />
+  <Project Path="SlowVibes.Api/SlowVibes.Api.csproj" Id="5b4f3a74-da8b-4b97-b065-3066c29399d6" />
 </Solution>
