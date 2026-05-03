@@ -66,5 +66,20 @@ namespace Persistence.Context
         public DbSet<AuditLogs> AuditLog { get; set; }
         #endregion
 
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            base.OnModelCreating(modelBuilder);
+
+            
+            modelBuilder.Entity<Users>(entity =>
+            {
+                
+                entity.Property(e => e.Id)
+                      .HasColumnName("UserId");
+
+                entity.HasKey(e => e.Id);
+            });
+        }
+
     }
 }

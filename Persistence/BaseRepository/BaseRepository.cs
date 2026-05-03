@@ -4,12 +4,12 @@ using System.Linq.Expressions;
 
 namespace Persistence.BaseRepository
 {
-    public abstract class BaseRepository<TEntity, TId> : IBaseRepository<TEntity, TId> where TEntity : class
+    public class BaseRepository<TEntity, TId> : IBaseRepository<TEntity, TId> where TEntity : class
     {
         protected readonly DbContext _context;
         protected readonly DbSet<TEntity> _dbSet;
 
-        protected BaseRepository(DbContext context)
+        public BaseRepository(DbContext context)
         {
             _context = context;
             _dbSet = _context.Set<TEntity>();

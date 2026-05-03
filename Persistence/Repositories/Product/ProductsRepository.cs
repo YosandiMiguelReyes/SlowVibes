@@ -1,5 +1,6 @@
 ﻿using Domain.Entities.Product;
 using Persistence.BaseRepository;
+using Persistence.Context;
 using Persistence.Interfaces.Product;
 
 
@@ -7,6 +8,11 @@ namespace Persistence.Repositories.Product
 {
     public class ProductsRepository : BaseRepository<Products, int>, IProductsRepository
     {
+       
+        public ProductsRepository(SlowVibesDbContext context) : base(context)
+        {
+            
+        }
         public Task<IEnumerable<Products>> GetActiveProductsAsync()
         {
             throw new NotImplementedException();

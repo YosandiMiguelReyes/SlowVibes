@@ -14,8 +14,8 @@ namespace Domain.Entities.Product
         public decimal? SalePrice { get; set; }
         public int? Stock { get; set; }
         public int? LowStockThreshold { get; set; }
-        public bool? IsActive { get; set; }
-        public DateTime? CreatedAt { get; set; }
+        public bool IsActive { get; set; }
+        public DateTime CreatedAt { get; set; }
 
 
     }

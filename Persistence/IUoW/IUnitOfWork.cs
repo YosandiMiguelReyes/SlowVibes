@@ -6,7 +6,6 @@ using Persistence.Interfaces.Order;
 using Persistence.Interfaces.Payment;
 using Persistence.Interfaces.Product;
 using Persistence.Interfaces.Users;
-using Persistence.Repositories.Order;
 
 namespace Persistence.UoW
 {

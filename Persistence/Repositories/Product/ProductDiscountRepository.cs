@@ -2,12 +2,17 @@
 
 using Domain.Entities.Product;
 using Persistence.BaseRepository;
+using Persistence.Context;
 using Persistence.Interfaces.Product;
 
 namespace Persistence.Repositories.Product
 {
     public class ProductDiscountRepository : BaseRepository<ProductDiscounts, int>, IProductDiscountsRepository
     {
+        public ProductDiscountRepository(SlowVibesDbContext context) : base(context)
+        {
+            
+        }
         public Task<IEnumerable<ProductDiscounts>> GetActiveProductsWithDiscountsAsync()
         {
             throw new NotImplementedException();

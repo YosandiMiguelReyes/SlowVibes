@@ -10,7 +10,7 @@ namespace Domain.Entities.InventoryMovement
         public int? Quantity { get; set; }
         public int? MovementTypeId { get; set; }
         public int? ReasonId { get; set; }
-        public DateTime? CreatedAt { get; set; }
+        public DateTime CreatedAt { get; set; }
 
     }
 }

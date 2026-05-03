@@ -12,7 +12,7 @@ namespace Domain.Entities.Audit
         public string? Entity { get; set; } //max length 100
         public int? EntityId { get; set; }
         public string Details { get; set; }
-        public DateTime? CreatedAt { get; set; }
+        public DateTime CreatedAt { get; set; }
 
     }
 }

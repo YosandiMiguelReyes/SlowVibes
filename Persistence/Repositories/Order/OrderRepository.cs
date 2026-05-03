@@ -2,12 +2,17 @@
 
 using Domain.Entities.Order;
 using Persistence.BaseRepository;
+using Persistence.Context;
 using Persistence.Interfaces.Order;
 
 namespace Persistence.Repositories.Order
 {
-    internal class OrderReository : BaseRepository<Orders, int>, IOrderRepository
+    internal class OrderRepository : BaseRepository<Orders, int>, IOrderRepository
     {
+        public OrderRepository(SlowVibesDbContext context) : base(context)
+        {
+            
+        }
         public Task<IEnumerable<Orders>> GetOrderByDateRange(DateTime startDate, DateTime endDate)
         {
             throw new NotImplementedException();

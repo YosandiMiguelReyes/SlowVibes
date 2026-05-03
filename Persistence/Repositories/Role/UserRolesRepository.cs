@@ -6,7 +6,7 @@ using Persistence.Interfaces.Role;
 
 namespace Persistence.Repositories.Role
 {
-    public class UserRolesRepository : BaseRepository<UserRoles, int>, IUserRolesRepository
+    public class UserRolesRepository //: BaseRepository<UserRoles, int>, IUserRolesRepository
     {
     }
 }

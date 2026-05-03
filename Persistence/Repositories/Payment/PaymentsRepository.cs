@@ -2,12 +2,17 @@
 
 using Domain.Entities.Payment;
 using Persistence.BaseRepository;
+using Persistence.Context;
 using Persistence.Interfaces.Payment;
 
 namespace Persistence.Repositories.Payment
 {
     public class PaymentsRepository : BaseRepository<Payments, int>, IPaymentsRepository
     {
+        public PaymentsRepository(SlowVibesDbContext context) : base(context)
+        {
+            
+        }
         public Task<IEnumerable<Payments>> GetPaymentsByAmountRangeAsync(decimal minAmount, decimal maxAmount)
         {
             throw new NotImplementedException();
