@@ -1,6 +1,7 @@
 ﻿
 
 using Domain.Base;
+using Domain.Entities.Roles;
 using Domain.Interfaces;
 using System.ComponentModel.DataAnnotations.Schema;
 
