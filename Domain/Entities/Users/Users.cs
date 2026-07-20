@@ -18,5 +18,8 @@ namespace Domain.Entities.User
         public bool IsActive { get; set; }
         public DateTime CreatedAt { get; set; }
 
+        //Navegation properties
+        public virtual ICollection<UserRoles> UsersRoles { get; set; } = new List<UserRoles>();
+
     }
 }

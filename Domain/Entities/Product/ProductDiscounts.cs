@@ -1,4 +1,5 @@
 ﻿using Domain.Base;
+using Domain.Entities.Category;
 using Domain.Interfaces;
 
 namespace Domain.Entities.Product
@@ -10,5 +11,9 @@ namespace Domain.Entities.Product
         public DateTime? StartDate { get; set; }
         public DateTime? EndDate { get; set; }
         public bool IsActive { get; set; }
+        
+
+        //Navegation properties
+        public virtual Products Product { get; set; }
     }
 }

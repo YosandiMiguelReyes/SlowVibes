@@ -1,4 +1,5 @@
 ﻿using Domain.Base;
+using Domain.Entities.Category;
 using Domain.Interfaces;
 
 namespace Domain.Entities.Product
@@ -16,6 +17,10 @@ namespace Domain.Entities.Product
         public int? LowStockThreshold { get; set; }
         public bool IsActive { get; set; }
         public DateTime CreatedAt { get; set; }
+
+        //Navegation properties
+        public virtual Categories Category { get; set; }
+        public virtual ProductDiscounts ProductDiscounts { get; set; }
 
 
     }
