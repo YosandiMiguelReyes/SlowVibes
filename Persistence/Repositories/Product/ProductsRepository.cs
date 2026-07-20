@@ -1,4 +1,5 @@
 ﻿using Domain.Entities.Product;
+using Microsoft.EntityFrameworkCore;
 using Persistence.BaseRepository;
 using Persistence.Context;
 using Persistence.DTO.Product;
@@ -18,52 +19,81 @@ namespace Persistence.Repositories.Product
 
         public async Task<IEnumerable<AdminProductWithDiscountDTO>> AdminGetActiveProductsAsync()
         {
-            throw new NotImplementedException();
+            return await _dbSet
+            .Where(p => p.IsActive == true)
+            .Select(ProductstMapper.AsAdminProductWithDiscount).ToListAsync();
         }
 
-        public Task<IEnumerable<AdminProductWithDiscountDTO>> AdminGetInactiveProductsAsync()
+        public async Task<IEnumerable<AdminProductWithDiscountDTO>> AdminGetInactiveProductsAsync()
         {
-            throw new NotImplementedException();
+            return await _dbSet
+            .Where(p => p.IsActive == false)
+            .Select(ProductstMapper.AsAdminProductWithDiscount).ToListAsync();
         }
 
-        public Task<AdminProductWithDiscountDTO> AdminGetProductBySkuAsync(string skuName)
+        public async Task<AdminProductWithDiscountDTO> AdminGetProductBySkuAsync(string skuName)
         {
-            throw new NotImplementedException();
+            return await _dbSet
+            .Where(p => p.SKU == skuName)
+            .Select(ProductstMapper.AsAdminProductWithDiscount)
+            .FirstOrDefaultAsync();
         }
 
-        public Task<IEnumerable<AdminProductWithDiscountDTO>> AdminGetProductsByCategoryAsync(string categoryName)
+        public async Task<IEnumerable<AdminProductWithDiscountDTO>> AdminGetProductsByCategoryAsync(string categoryName)
         {
-            throw new NotImplementedException();
+            return await _dbSet
+            .Where(p => p.Category.Name.Contains(categoryName))
+            .Select(ProductstMapper.AsAdminProductWithDiscount)
+            .ToListAsync();
         }
 
-        public Task<IEnumerable<AdminProductWithDiscountDTO>> AdminGetProductsByNameAsync(string productName)
+        public async Task<IEnumerable<AdminProductWithDiscountDTO>> AdminGetProductsByNameAsync(string productName)
         {
-            throw new NotImplementedException();
+            return await _dbSet
+            .Where(p => p.Name.Contains(productName))
+            .Select(ProductstMapper.AsAdminProductWithDiscount)
+            .ToListAsync();
         }
 
-        public Task<IEnumerable<AdminProductWithDiscountDTO>> AdminGetProductsByPurchasePriceAsync(decimal minPrice, decimal maxPrice)
+        public async Task<IEnumerable<AdminProductWithDiscountDTO>> AdminGetProductsByPurchasePriceAsync(decimal minPrice, decimal maxPrice)
         {
-            throw new NotImplementedException();
+            return await _dbSet
+            .Where(p => p.PurchasePrice >= minPrice && p.PurchasePrice <= maxPrice)
+            .Select(ProductstMapper.AsAdminProductWithDiscount)
+            .ToListAsync();
         }
 
-        public Task<IEnumerable<AdminProductWithDiscountDTO>> AdminGetProductsBySalePriceAsync(decimal minPrice, decimal maxPrice)
+        public async Task<IEnumerable<AdminProductWithDiscountDTO>> AdminGetProductsBySalePriceAsync(decimal minPrice, decimal maxPrice)
         {
-            throw new NotImplementedException();
+            return await _dbSet
+            .Where(p => p.SalePrice >= minPrice && p.SalePrice <= maxPrice)
+            .Select(ProductstMapper.AsAdminProductWithDiscount)
+            .ToListAsync();
         }
 
-        public Task<IEnumerable<AdminProductWithDiscountDTO>> AdminGetProductsByStockAsync(int stock)
+        public async Task<IEnumerable<AdminProductWithDiscountDTO>> AdminGetProductsByStockAsync(int stock)
         {
-            throw new NotImplementedException();
+            return await _dbSet
+            .Where(p => p.Stock == stock)
+            .Select(ProductstMapper.AsAdminProductWithDiscount)
+            .ToListAsync();
         }
 
-        public Task<IEnumerable<AdminProductWithDiscountDTO>> AdminGetProductsLowStockAsync()
+        public async Task<IEnumerable<AdminProductWithDiscountDTO>> AdminGetProductsLowStockAsync()
         {
-            throw new NotImplementedException();
+            return await _dbSet
+            .Where(p => p.Stock <= p.LowStockThreshold
+                    && p.IsActive == true)
+            .Select(ProductstMapper.AsAdminProductWithDiscount)
+            .ToListAsync();
         }
 
-        public Task<IEnumerable<ProductWithDiscountDTO>> GetActiveProductsAsync()
+        public async Task<IEnumerable<ProductWithDiscountDTO>> GetActiveProductsAsync()
         {
-            throw new NotImplementedException();
+            return await _dbSet
+            .Where(p => p.IsActive)
+            .Select(ProductstMapper.AsProductWithDiscount)
+            .ToListAsync();
         }
 
         /*public Task<IEnumerable<ProductWithDiscountDTO>> GetInactiveProductsAsync()
@@ -71,19 +101,28 @@ namespace Persistence.Repositories.Product
             throw new NotImplementedException();
         }*/ // Only admin can see inactive products
 
-        public Task<ProductWithDiscountDTO> GetProductBySkuAsync(string skuName)
+        public async Task<ProductWithDiscountDTO> GetProductBySkuAsync(string skuName)
         {
-            throw new NotImplementedException();
+            return await _dbSet
+            .Where(p => p.IsActive && p.SKU.Contains(skuName))
+            .Select(ProductstMapper.AsProductWithDiscount)
+            .FirstOrDefaultAsync();
         }
 
-        public Task<IEnumerable<ProductWithDiscountDTO>> GetProductsByCategoryAsync(string categoryName)
+        public async Task<IEnumerable<ProductWithDiscountDTO>> GetProductsByCategoryAsync(string categoryName)
         {
-            throw new NotImplementedException();
+            return await _dbSet
+            .Where(p => p.IsActive && p.Category.Name.Contains(categoryName))
+            .Select(ProductstMapper.AsProductWithDiscount)
+            .ToListAsync();
         }
 
-        public Task<IEnumerable<ProductWithDiscountDTO>> GetProductsByNameAsync(string productName)
+        public async Task<IEnumerable<ProductWithDiscountDTO>> GetProductsByNameAsync(string productName)
         {
-            throw new NotImplementedException();
+            return await _dbSet
+            .Where(p => p.IsActive && p.Name.Contains(productName))
+            .Select(ProductstMapper.AsProductWithDiscount)
+            .ToListAsync();
         }
 
         /*public Task<IEnumerable<ProductWithDiscountDTO>> GetProductsByPurchasePriceAsync(decimal minPrice, decimal maxPrice)
@@ -91,9 +130,12 @@ namespace Persistence.Repositories.Product
             throw new NotImplementedException();
         }*/ // Only admin can see products by purchase price
 
-        public Task<IEnumerable<ProductWithDiscountDTO>> GetProductsBySalePriceAsync(decimal minPrice, decimal maxPrice)
+        public async Task<IEnumerable<ProductWithDiscountDTO>> GetProductsBySalePriceAsync(decimal minPrice, decimal maxPrice)
         {
-            throw new NotImplementedException();
+            return await _dbSet
+            .Where(p => p.IsActive && p.SalePrice >= minPrice && p.SalePrice <= maxPrice)
+            .Select(ProductstMapper.AsProductWithDiscount)
+            .ToListAsync();
         }
 
         /*public Task<IEnumerable<ProductWithDiscountDTO>> GetProductsByStockAsync(int stock)
