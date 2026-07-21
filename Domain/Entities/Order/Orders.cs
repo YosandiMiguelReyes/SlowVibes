@@ -1,4 +1,5 @@
 ﻿using Domain.Base;
+using Domain.Entities.User;
 
 namespace Domain.Entities.Order
 {
@@ -13,5 +14,8 @@ namespace Domain.Entities.Order
         public string? DeliveryType { get; set; } //max length 20
         public string ShippingAddress { get; set; } //max length 255
         public string CustomerPhone { get; set; } //max length 20
+
+        //Navegation properties
+        public virtual Users User {get; set;}
     }
 }

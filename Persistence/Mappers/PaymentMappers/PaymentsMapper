@@ -1,0 +1,22 @@
+using Domain.Entities.Payment;
+using System;
+using System.Collections.Generic;
+using System.Linq.Expressions;
+using System.Net.NetworkInformation;
+using System.Text;
+
+namespace Persistence.Mappers.PaymentMappers
+{
+    public static class PaymentsMapper
+    {
+        public static Expression<Func<Payments, PaymentDTO>> AsPaymentDTO = p => new PaymentDTO
+        {
+            OrderId = p.order.Id,
+            PaymentMethod = p.PaymentMethod.Name,
+            Amount = p.Amount,
+            Status = p.Status,
+            ReferenceNumber = p.ReferenceNumber,
+            PaymentDate = p.PaymentDate,
+        };
+    }
+}
