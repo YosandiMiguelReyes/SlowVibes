@@ -2,7 +2,7 @@
 
 using Domain.Entities.Payment;
 using Domain.Repositories;
-using Persistence.DTO.Product;
+using Persistence.DTO.Payment;
 
 namespace Persistence.Interfaces.Payment
 {

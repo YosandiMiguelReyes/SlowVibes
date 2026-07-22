@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq.Expressions;
 using System.Net.NetworkInformation;
 using System.Text;
+using Persistence.DTO.Payment;
 
 namespace Persistence.Mappers.PaymentMappers
 {

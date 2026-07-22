@@ -1,9 +1,10 @@
 ﻿
 
 using Domain.Entities.Payment;
+using Microsoft.EntityFrameworkCore;
 using Persistence.BaseRepository;
 using Persistence.Context;
-using Persistence.DTO.Product;
+using Persistence.DTO.Payment;
 using Persistence.Interfaces.Payment;
 using Persistence.Mappers.PaymentMappers;
 
@@ -19,59 +20,110 @@ namespace Persistence.Repositories.Payment
         public async Task<IEnumerable<PaymentDTO>> GetPaymentByUserId(int userId)
         {
             return await _dbSet
-            .Where(p => p.order.User.Id == userId)
+            .Where(p => p.order.UserId == userId)
             .Select(PaymentsMapper.AsPaymentDTO)
             .ToListAsync();
         }
 
-        public Task<IEnumerable<PaymentDTO>> GetPaymentsByAmountRangeAsync(decimal minAmount, decimal maxAmount)
+        public async Task<IEnumerable<PaymentDTO>> GetPaymentsByAmountRangeAsync(decimal minAmount, decimal maxAmount)
         {
-            throw new NotImplementedException();
+            return await _dbSet
+            .Where(p => p.Amount >= minAmount && p.Amount <= maxAmount)
+            .Select(PaymentsMapper.AsPaymentDTO)
+            .ToListAsync();
         }
 
-        public Task<IEnumerable<PaymentDTO>> GetPaymentsByDateRangeAsync(DateTime startDate, DateTime endDate)
+        public async Task<IEnumerable<PaymentDTO>> GetPaymentsByDateRangeAsync(DateTime startDate, DateTime endDate)
         {
-            throw new NotImplementedException();
+            return await _dbSet
+            .Where(p => p.PaymentDate >= startDate && p.PaymentDate <= endDate)
+            .Select(PaymentsMapper.AsPaymentDTO)
+            .ToListAsync();
         }
 
-        public Task<IEnumerable<PaymentDTO>> GetPaymentsByMethodAsync(string method)
+        public async Task<IEnumerable<PaymentDTO>> GetPaymentsByMethodAsync(string method)
         {
-            throw new NotImplementedException();
+            return await _dbSet
+            .Where(p => p.PaymentMethod.Name == method)
+            .Select(PaymentsMapper.AsPaymentDTO)
+            .ToListAsync();
         }
 
-        public Task<PaymentDTO?> GetPaymentsByOrderIdAsync(int orderId)
+        public async Task<PaymentDTO?> GetPaymentsByOrderIdAsync(int orderId)
         {
-            throw new NotImplementedException();
+            return await _dbSet
+            .Where(p => p.OrderId == orderId)
+            .Select(PaymentsMapper.AsPaymentDTO)
+            .FirstOrDefaultAsync();
         }
 
-        public Task<PaymentDTO?> GetPaymentsByReferenceNumberAsync(string referenceNumber)
+        public async Task<PaymentDTO?> GetPaymentsByReferenceNumberAsync(string referenceNumber)
         {
-            throw new NotImplementedException();
+            return await _dbSet
+            .Where(p => p.ReferenceNumber == referenceNumber)
+            .Select(PaymentsMapper.AsPaymentDTO)
+            .FirstOrDefaultAsync();
         }
 
-        public Task<IEnumerable<PaymentDTO>> GetPaymentsByStatusAsync(string status)
+        public async Task<IEnumerable<PaymentDTO>> GetPaymentsByStatusAsync(string status)
         {
-            throw new NotImplementedException();
+            return await _dbSet
+            .Where(p => p.Status == status)
+            .Select(PaymentsMapper.AsPaymentDTO)
+            .ToListAsync();
         }
 
-        public Task<IEnumerable<PaymentDTO>> GetPaymentsByUserNameAsync(string userName)
+        public async Task<IEnumerable<PaymentDTO>> GetPaymentsByUserNameAsync(string userName)
         {
-            throw new NotImplementedException();
+            return await _dbSet
+            .Where(p => p.order.User.UserName == userName)
+            .Select(PaymentsMapper.AsPaymentDTO)
+            .ToListAsync();
         }
 
-        public Task<IEnumerable<PaymentDTO>> GetPaymentsOrderedByAmountAsync(bool ascending)
+        public async Task<IEnumerable<PaymentDTO>> GetPaymentsOrderedByAmountAsync(bool ascending)
         {
-            throw new NotImplementedException();
+            if (ascending)
+            {
+                return await _dbSet
+                .OrderBy(p => p.Amount)
+                .Select(PaymentsMapper.AsPaymentDTO)
+                .ToListAsync();
+            }
+            else
+            {
+                return await _dbSet
+                .OrderByDescending(p => p.Amount)
+                .Select(PaymentsMapper.AsPaymentDTO)
+                .ToListAsync();
+            }
+            
+            
         }
 
-        public Task<IEnumerable<PaymentDTO>> GetPaymentsOrderedByDateAsync(bool ascending)
+        public async Task<IEnumerable<PaymentDTO>> GetPaymentsOrderedByDateAsync(bool ascending)
         {
-            throw new NotImplementedException();
+            if (ascending)
+            {
+                return await _dbSet
+                .OrderBy(p => p.PaymentDate)
+                .Select(PaymentsMapper.AsPaymentDTO)
+                .ToListAsync();
+            }
+            else
+            {
+                return await _dbSet
+                .OrderByDescending(p => p.PaymentDate)
+                .Select(PaymentsMapper.AsPaymentDTO)
+                .ToListAsync();
+            }
         }
 
-        public Task<decimal> GetTotalPaidByOrderIdAsync(int orderId)
+        public async Task<decimal> GetTotalPaidByOrderIdAsync(int orderId)
         {
-            throw new NotImplementedException();
+            return await _dbSet
+            .Where(p => p.OrderId == orderId)
+            .SumAsync(p => p.Amount ?? 0);
         }
     }
 }
