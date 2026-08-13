@@ -28,13 +28,13 @@ namespace Domain.Entities.InventoryMovement
         public static InventoryMovements CreateInventoryMovements (int? productId, int orderId, int? quantity, int? movementTypeId, int? reasonId)
         {
             if(productId <= 0)
-                new DomainException("El product Id debe ser de un producto valido");
+                throw new DomainException("El product Id debe ser de un producto valido");
             if(quantity <= 0)
-                new DomainException("Al menos un producto debe ser seleccionado");
+                throw new DomainException("Al menos un producto debe ser seleccionado");
             if(movementTypeId <= 0)
-                new DomainException("El ID del tipo de movimiento del inventario debe ser valido");
+                throw new DomainException("El ID del tipo de movimiento del inventario debe ser valido");
             if(reasonId <= 0)
-                new DomainException("El ID del tipo de la rason del inventario debe ser valido");
+                throw new DomainException("El ID del tipo de la rason del inventario debe ser valido");
 
             return new InventoryMovements(productId, orderId, quantity, movementTypeId, reasonId);
         }

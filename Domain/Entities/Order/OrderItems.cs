@@ -27,15 +27,16 @@ namespace Domain.Entities.Order
         public static OrderItems CreateOrderItems(int? orderId, int? productId, int? quantity, decimal? unitPrice, decimal? discountApplied, decimal? profit )
         {
             if(orderId <= 0)
-                new DomainException("La orden debe de ser valida");
+                throw new DomainException("La orden debe de ser valida");
 
             if(productId <= 0)
-                new DomainException("El producto debe de ser valido");
+                throw new DomainException("El producto debe de ser valido");
 
             if(quantity <= 0)
-                new DomainException("La cantidad no puede ser cero o menor");
+                throw new DomainException("La cantidad no puede ser cero o menor");
 
-            
+            if(discountApplied < 0 || discountApplied > 100)
+                throw new DomainException("El descuento aplicado no puede ser menor que 0% ni mayor al 100%");
             
             return new OrderItems(orderId, productId, quantity, unitPrice, discountApplied, profit);
         }
