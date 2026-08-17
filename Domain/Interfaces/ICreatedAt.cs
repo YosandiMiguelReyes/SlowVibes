@@ -2,6 +2,6 @@
 {
     public interface ICreatedAt
     {
-       public DateTime CreatedAt {get;}
+       public DateTimeOffset CreatedAt {get;}
     }
 }

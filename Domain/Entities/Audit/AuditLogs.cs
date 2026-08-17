@@ -10,25 +10,25 @@ namespace Domain.Entities.Audit
     public class AuditLogs : BaseEntity<int>, ICreatedAt
     {
         public int? UserId { get; private set; }
-        public string? Action { get; private set; } //max length 100
-        public string? Entity { get; private set; } //max length 100
-        public int? EntityId { get; private set; }
-        public string Details { get; private set; }
-        public DateTime CreatedAt { get; private set; }
+        public string Action { get; private set; } = string.Empty; //max length 100
+        public string Entity { get; private set; } = string.Empty; //max length 100
+        public int EntityId { get; private set; }
+        public string Details { get; private set; } = string.Empty;
+        public DateTimeOffset CreatedAt { get; private set; }
 
         private AuditLogs (){}
 
-        private AuditLogs (int? userId, string? action, string? entity, int entityId, string details)
+        private AuditLogs (int? userId, string action, string entity, int entityId, string? details)
         {
             UserId = userId;
             Action = action;
             Entity = entity;
             EntityId = entityId;
-            Details = details;
-            CreatedAt = DateTime.UtcNow;
+            Details = details?.Trim() ?? string.Empty;
+            CreatedAt = DateTimeOffset.UtcNow;
         }
 
-        public static AuditLogs CreateAuditLogs(int? userId, string? action, string? entity, int entityId, string details)
+        public static AuditLogs Create(int? userId, string action, string entity, int entityId, string? details)
         {
             if(string.IsNullOrWhiteSpace(action))
                 throw new DomainException("La accion del log de auditoria es obligatoria.");
@@ -39,7 +39,7 @@ namespace Domain.Entities.Audit
 
 
 
-            return new AuditLogs(userId, action, entity, entityId, details ?? string.Empty);
+            return new AuditLogs(userId, action.Trim(), entity.Trim(), entityId, details ?? string.Empty);
         }
 
     }
