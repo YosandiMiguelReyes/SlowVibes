@@ -1,51 +1,142 @@
 ﻿using Domain.Base;
 using Domain.Entities.User;
 using Domain.Exceptions;
+using Domain.Entities.Order.Enums;
 
 namespace Domain.Entities.Order
 {
     public class Orders : BaseEntity<int>
     {
-        public int? UserId { get; private set; }
-        public DateTime? OrderDate { get; private set; }
-        public decimal? TotalAmount { get; private set; }
-        public decimal? TotalProfit { get; private set; }
-        public int? OrderStatusId { get; private set; } // 0: Pending, 1: Completed, 2: Cancelled
-        public string? OrderSource { get; private set; } //max length 20
-        public string? DeliveryType { get; private set; } //max length 20
-        public string ShippingAddress { get; private set; } //max length 255
-        public string CustomerPhone { get; private set; } //max length 20
+        private readonly List<OrderItems> _items = new();
 
-        //Navegation properties
-        public virtual Users User {get; set;}
+        public IReadOnlyCollection<OrderItems> Items => _items.AsReadOnly();
+
+        public int UserId { get; private set; }
+        public DateTimeOffset OrderDate { get; private set; }
+        public decimal TotalAmount { get; private set; }
+        public decimal TotalProfit { get; private set; }
+        public OrderStatuses OrderStatus { get; private set; }
+        public OrderSources OrderSource { get; private set; } //max length 20
+        public DeliveryTypes DeliveryType { get; private set; } //max length 20
+        public string? ShippingAddress { get; private set; } //max length 255
 
         private Orders(){}
 
-        private Orders (int? userId, decimal? totalAmount, decimal? totalProfit, string? orderSource, string? deliveryType, string shippingAddress, string customerPhone)
+        private Orders (int userId, OrderSources orderSource, DeliveryTypes deliveryType, string? shippingAddress)
         {
             UserId = userId;
-            OrderDate = DateTime.UtcNow;
-            TotalAmount = totalAmount;
-            TotalProfit = totalProfit;
-            OrderStatusId = 0;
+            OrderDate = DateTimeOffset.UtcNow;
+            OrderStatus = OrderStatuses.Pending;
+
             OrderSource = orderSource;
             DeliveryType = deliveryType;
             ShippingAddress = shippingAddress;
-            CustomerPhone = customerPhone;
+
+            TotalAmount = 0m;
+            TotalProfit = 0m;
         }
 
-        public static Orders CreateOrder(int? userId, decimal? totalAmount, decimal? totalProfit, string? orderSource, string? deliveryType, string shippingAddress, string customerPhone)
+        public static Orders Create(int userId, OrderSources orderSource, DeliveryTypes deliveryType, string? shippingAddress)
         {
             if(userId <= 0)
                 throw new DomainException("El usuario de la orden debe de ser valido");
-            if(totalAmount <= 0)
-                throw new DomainException("El total de la venta no puede ser menor o igual a 0");
-            if(String.IsNullOrWhiteSpace(orderSource))
-                throw new DomainException("Se debe agregar el de donde viene la orden");
-            if(String.IsNullOrWhiteSpace(deliveryType))
-                throw new DomainException("Se debe agregar el tipo de delivery");
+            if (deliveryType == DeliveryTypes.Delivery &&
+                string.IsNullOrWhiteSpace(shippingAddress))
+            {
+                throw new DomainException(
+                    "Las órdenes de delivery requieren una dirección.");
+            }
+            if (deliveryType == DeliveryTypes.PickUp)
+                shippingAddress = null;
+            else
+                shippingAddress = shippingAddress!.Trim();
 
-            return new Orders(userId, totalAmount, totalProfit, orderSource, deliveryType, shippingAddress ?? String.Empty, customerPhone ?? String.Empty);
+            return new Orders(userId, orderSource, deliveryType, shippingAddress);
+        }
+
+
+                public void AddItem(OrderItems item)
+        {
+            if (OrderStatus != OrderStatuses.Pending)
+                throw new DomainException(
+                    "Solo se pueden agregar productos a una orden pendiente.");
+
+            if (item is null)
+                throw new DomainException(
+                    "El artículo de la orden es obligatorio.");
+
+            var existingItem = _items.FirstOrDefault(
+                x => x.ProductId == item.ProductId);
+
+            if (existingItem is not null)
+            {
+                existingItem.ChangeQuantity(
+                    existingItem.Quantity + item.Quantity);
+            }
+            else
+            {
+                _items.Add(item);
+            }
+
+            RecalculateTotals();
+        }
+
+        public void RemoveItem(int productId)
+        {
+            if (OrderStatus != OrderStatuses.Pending)
+                throw new DomainException(
+                    "Solo se pueden eliminar productos de una orden pendiente.");
+
+            var item = _items.FirstOrDefault(
+                x => x.ProductId == productId);
+
+            if (item is null)
+                throw new DomainException(
+                    "El producto no pertenece a la orden.");
+
+            _items.Remove(item);
+
+            RecalculateTotals();
+        }
+
+        public void Complete()
+        {
+            if (OrderStatus != OrderStatuses.Pending)
+                throw new DomainException(
+                    "Solo una orden pendiente puede completarse.");
+
+            if (_items.Count == 0)
+                throw new DomainException(
+                    "No se puede completar una orden sin productos.");
+
+            if (TotalAmount <= 0)
+                throw new DomainException(
+                    "La orden debe tener un total mayor que cero.");
+
+            OrderStatus = OrderStatuses.Completed;
+        }
+
+        public void Cancel()
+        {
+            if (OrderStatus == OrderStatuses.Cancelled)
+                throw new DomainException(
+                    "La orden ya está cancelada.");
+
+            if (OrderStatus == OrderStatuses.Completed)
+                throw new DomainException(
+                    "Una orden completada no puede ser cancelada.");
+
+            OrderStatus = OrderStatuses.Cancelled;
+        }
+
+        private void RecalculateTotals()
+        {
+            TotalAmount = _items.Sum(item =>
+                item.UnitPrice *
+                item.Quantity *
+                (1m - item.DiscountApplied / 100m));
+
+            TotalProfit = _items.Sum(item => item.Profit);
         }
     }
 }

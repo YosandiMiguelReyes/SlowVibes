@@ -1,6 +1,7 @@
 ﻿using Domain.Base;
 using Domain.Exceptions;
 using Domain.Interfaces;
+using Domain.Entities.Notification.Enums;
 
 namespace Domain.Entities.Notification
 {

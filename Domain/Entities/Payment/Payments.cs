@@ -1,5 +1,6 @@
 ﻿using Domain.Base;
 using Domain.Entities.Order;
+using Domain.Entities.Payment.Enums;
 using Domain.Exceptions;
 
 namespace Domain.Entities.Payment
@@ -7,7 +8,7 @@ namespace Domain.Entities.Payment
     public class Payments : BaseEntity<int>
     {
         public int? OrderId { get; private set; }
-        public int? PaymentMethodId { get; private set; }
+        public PaymentMethods PaymentMethod { get; private set; }
         public decimal? Amount { get; private set; }
         public string? Status { get; private set; } //max length 20
         public string? ReferenceNumber { get; private set; } //max length 100
@@ -19,10 +20,10 @@ namespace Domain.Entities.Payment
 
         private Payments (){}
 
-        private Payments (int? orderId, int? paymentMethodId, decimal? amount, string? status, string referenceNumber)
+        private Payments (int? orderId, PaymentMethods paymentMethod, decimal? amount, string? status, string referenceNumber)
         {
             OrderId = orderId;
-            PaymentMethodId = paymentMethodId;
+            PaymentMethod = paymentMethod;
             Amount = amount;
             Status = status;
             ReferenceNumber = referenceNumber;
