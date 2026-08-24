@@ -7,43 +7,62 @@ namespace Domain.Entities.Payment
 {
     public class Payments : BaseEntity<int>
     {
-        public int? OrderId { get; private set; }
+        public int OrderId { get; private set; }
         public PaymentMethods PaymentMethod { get; private set; }
-        public decimal? Amount { get; private set; }
-        public string? Status { get; private set; } //max length 20
-        public string? ReferenceNumber { get; private set; } //max length 100
-        public DateTime? PaymentDate { get; private set; }
-
-        //Navegation properties
-        public virtual Orders order {get; set;}
-        public virtual PaymentMethods PaymentMethod {get; set;}
+        public decimal Amount { get; private set; }
+        public PaymentStatus Status { get; private set; } 
+        public string? ReferenceNumber { get; private set; }
+        public DateTimeOffset PaymentDate { get; private set; }
 
         private Payments (){}
 
-        private Payments (int? orderId, PaymentMethods paymentMethod, decimal? amount, string? status, string referenceNumber)
+        private Payments (int orderId, PaymentMethods paymentMethod, decimal amount, string referenceNumber)
         {
             OrderId = orderId;
             PaymentMethod = paymentMethod;
             Amount = amount;
-            Status = status;
+            Status = PaymentStatus.Pending;
             ReferenceNumber = referenceNumber;
-            PaymentDate = DateTime.UtcNow;
+            PaymentDate = DateTimeOffset.UtcNow;
         }
 
-        public static Payments CreatePayment(int? orderId, int? paymentMethodId, decimal? amount, string? status, string referenceNumber)
+        public static Payments Create(int orderId, PaymentMethods paymentMethod, decimal amount, string? referenceNumber)
         {
             if(orderId <= 0)
                 throw new DomainException("La orden debe de ser valida");
-            if(paymentMethodId < 0 || paymentMethodId > 2) 
-                throw new DomainException("El metodo de pago debe de ser valido");
             if(amount <= 0)
                 throw new DomainException("La cantidad a pagar no puede ser 0 o negativa");
-            if(String.IsNullOrWhiteSpace(status))
-                throw new DomainException("El pago debe de tener un estado");
-            if(String.IsNullOrWhiteSpace(referenceNumber))
+
+            referenceNumber = referenceNumber?.Trim();
+
+            if(paymentMethod == PaymentMethods.Efectivo)
+            {
+                referenceNumber = null;
+            }
+            else if(String.IsNullOrWhiteSpace(referenceNumber))
                 throw new DomainException("El pago debe de tener un numero de referencia");
 
-            return new Payments(orderId, paymentMethodId, amount, status, referenceNumber);
+            return new Payments(orderId, paymentMethod, amount, referenceNumber);
+        }
+
+        public void MarkAsCompleted()
+        {
+            EnsurePending();
+
+            Status = PaymentStatus.Completed;
+        }
+
+        public void MarkAsFailed()
+        {
+            EnsurePending();
+
+            Status = PaymentStatus.Failed;
+        }
+
+        private void EnsurePending()
+        {
+            if (Status != PaymentStatus.Pending)
+                throw new DomainException("Solo se pueden modificar pagos pendientes.");
         }
     }
 }
