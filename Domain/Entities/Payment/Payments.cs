@@ -1,5 +1,4 @@
 ﻿using Domain.Base;
-using Domain.Entities.Order;
 using Domain.Entities.Payment.Enums;
 using Domain.Exceptions;
 
@@ -29,9 +28,9 @@ namespace Domain.Entities.Payment
         public static Payments Create(int orderId, PaymentMethods paymentMethod, decimal amount, string? referenceNumber)
         {
             if(orderId <= 0)
-                throw new DomainException("La orden debe de ser valida");
+                throw new DomainException("La orden debe ser válida.");
             if(amount <= 0)
-                throw new DomainException("La cantidad a pagar no puede ser 0 o negativa");
+                throw new DomainException("La cantidad a pagar debe ser mayor que cero.");
 
             referenceNumber = referenceNumber?.Trim();
 
@@ -40,7 +39,7 @@ namespace Domain.Entities.Payment
                 referenceNumber = null;
             }
             else if(String.IsNullOrWhiteSpace(referenceNumber))
-                throw new DomainException("El pago debe de tener un numero de referencia");
+                throw new DomainException("El pago debe tener un número de referencia");
 
             return new Payments(orderId, paymentMethod, amount, referenceNumber);
         }

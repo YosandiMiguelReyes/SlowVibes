@@ -1,5 +1,4 @@
 ﻿using Domain.Base;
-using Domain.Entities.Category;
 using Domain.Exceptions;
 using Domain.Interfaces;
 
@@ -74,8 +73,6 @@ namespace Domain.Entities.Product
             PurchasePrice = purchasePrice;
             SalePrice = salePrice;
             LowStockThreshold = lowStockThreshold;
-
-            // SKU intentionally remains unchanged.
         }
 
         public void UpdateImage(string? imageUrl)

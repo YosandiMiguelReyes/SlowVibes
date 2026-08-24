@@ -6,10 +6,6 @@ namespace Domain.Entities.User
 {
     public class Users :BaseEntity<int>, IIsActive, ICreatedAt
     {
-        //chat gpt read... Como no tengo una propiedad para Rol lo mas conveniente
-        //es que la otra capa se encargue de asignar el rol al usuario, ya que en la capa de dominio no se tiene conocimiento de los roles y permisos, por lo que no es necesario tener una propiedad para Rol en la entidad Users.
-        //Por que nuestro metodo crear es static?
-        //Siento que olvido unas validaciones de los campos nullable, osea si no tiene nada que sea null
         public string FullName { get; private set; } //max length 150
         public string? UserName { get; private set; } //max length 50
         public string Email { get; private set; } //max length 150 

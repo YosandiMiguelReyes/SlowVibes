@@ -1,6 +1,5 @@
 ﻿using Domain.Base;
 using Domain.Exceptions;
-using Domain.Interfaces;
 
 namespace Domain.Entities.Product
 {
@@ -25,16 +24,16 @@ namespace Domain.Entities.Product
         private static void ValidateDiscount(decimal percentage, DateTimeOffset startDate, DateTimeOffset endDate)
         {
             if(percentage <= 0 || percentage >= 90)
-                throw new DomainException("El porcentaje de descuento no puede ser 0 o 100");
+                throw new DomainException("El porcentaje de descuento no puede ser 0 o 90");
             if(startDate >= endDate)
-                throw new DomainException("El dia de inicio del descuento no puede ser despues del dia de terminacion");
+                throw new DomainException("La fecha de inicio del descuento debe ser anterior a la fecha de finalización.");
         }
 
         public static ProductDiscounts CreateProductDiscounts (int productId, decimal percentage, DateTimeOffset startDate, DateTimeOffset endDate)
         {
             ValidateDiscount(percentage, startDate, endDate);
             if(productId <= 0)
-                throw new DomainException("El producto debe de ser valido");
+                throw new DomainException("El producto debe ser válido");
 
             return new ProductDiscounts(productId, percentage, startDate, endDate);
         }

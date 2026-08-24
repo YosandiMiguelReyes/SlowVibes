@@ -1,11 +1,7 @@
-﻿
-
-using System.ComponentModel.DataAnnotations;
-
-namespace Domain.Base
+﻿namespace Domain.Base
 {
     public abstract class BaseEntity<Tkey>
     {
-        public Tkey? Id { get; set; }
+        public Tkey Id { get; protected set; }
     }
 }

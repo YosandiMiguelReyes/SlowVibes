@@ -10,7 +10,7 @@ namespace Domain.Entities.Order
         public int Quantity { get; private set; }
 
         public decimal PurchasePrice { get; private set; }
-        public decimal UnitPrice { get; private set; } //Unit price is the price of the product without discount applied
+        public decimal UnitPrice { get; private set; } 
         public decimal DiscountApplied { get; private set; }
 
         public decimal Profit { get; private set; }
@@ -30,7 +30,7 @@ namespace Domain.Entities.Order
         public static OrderItems CreateOrderItems(int productId, int quantity, decimal purchasePrice, decimal unitPrice, decimal discountApplied)
         {
             if(productId <= 0)
-                throw new DomainException("El producto debe de ser valido");
+                throw new DomainException("El producto debe ser válido.");
 
             if(quantity <= 0)
                 throw new DomainException("La cantidad no puede ser cero o menor");

@@ -5,7 +5,7 @@ namespace Domain.Entities.InventoryMovement
 {
     public class InventoryMovementReasons : BaseEntity<int>
     {
-        public string Name { get; private set; } = string.Empty; //max length 50
+        public string Name { get; private set; } = string.Empty;
 
         private InventoryMovementReasons(){}
         private InventoryMovementReasons(string name)
@@ -16,7 +16,7 @@ namespace Domain.Entities.InventoryMovement
         public static InventoryMovementReasons Create(string name)
         {
             if(String.IsNullOrWhiteSpace(name))
-                throw new DomainException("El nombre de la razon del inventario debe de ser valida");
+                throw new DomainException("El nombre de la razón del inventario debe de ser válida");
 
             return new InventoryMovementReasons(name.Trim());
         }
@@ -24,7 +24,7 @@ namespace Domain.Entities.InventoryMovement
         public void Update(string name)
         {
             if(String.IsNullOrWhiteSpace(name))
-                throw new DomainException("El nombre de la razon del inventario debe de ser valida");
+                throw new DomainException("El nombre de la razón del inventario debe de ser válida");
 
             Name = name.Trim();
         }

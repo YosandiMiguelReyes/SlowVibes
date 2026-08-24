@@ -7,11 +7,11 @@ namespace Domain.Entities.Notification
 {
     public class Notifications : BaseEntity<int>, ICreatedAt
     {
-        public string Type { get; private set; } = string.Empty; //max 20 characters
-        public string Recipient { get; private set; } = string.Empty;//max 150 characters
+        public string Type { get; private set; } = string.Empty; 
+        public string Recipient { get; private set; } = string.Empty;
         public string Message { get; private set; } = string.Empty;
 
-        public NotificationStatus Status { get; private set; } //max 20 characters
+        public NotificationStatus Status { get; private set; } 
 
         public DateTimeOffset CreatedAt { get; private set; }
         public DateTimeOffset? SentAt { get; private set; }
@@ -30,13 +30,13 @@ namespace Domain.Entities.Notification
         public static Notifications Create(string type, string recipient, string message)
         {
             if (string.IsNullOrWhiteSpace(type))
-                throw new DomainException("El tipo de notificacion es requerido.");
+                throw new DomainException("El tipo de notificación es requerido.");
 
             if (string.IsNullOrWhiteSpace(recipient))
-                throw new DomainException("El recibidor de la notificacion es requerido.");
+                throw new DomainException("El destinatario de la notificación es requerido.");
 
             if (string.IsNullOrWhiteSpace(message))
-                throw new DomainException("El mensaje de la notificacion es requerido.");
+                throw new DomainException("El mensaje de la notificación es requerido.");
 
             return new Notifications(
                 type.Trim(),

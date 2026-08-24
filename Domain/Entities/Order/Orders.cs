@@ -1,5 +1,4 @@
 ﻿using Domain.Base;
-using Domain.Entities.User;
 using Domain.Exceptions;
 using Domain.Entities.Order.Enums;
 
@@ -16,9 +15,9 @@ namespace Domain.Entities.Order
         public decimal TotalAmount { get; private set; }
         public decimal TotalProfit { get; private set; }
         public OrderStatuses OrderStatus { get; private set; }
-        public OrderSources OrderSource { get; private set; } //max length 20
-        public DeliveryTypes DeliveryType { get; private set; } //max length 20
-        public string? ShippingAddress { get; private set; } //max length 255
+        public OrderSources OrderSource { get; private set; } 
+        public DeliveryTypes DeliveryType { get; private set; } 
+        public string? ShippingAddress { get; private set; } 
 
         private Orders(){}
 
@@ -39,7 +38,7 @@ namespace Domain.Entities.Order
         public static Orders Create(int userId, OrderSources orderSource, DeliveryTypes deliveryType, string? shippingAddress)
         {
             if(userId <= 0)
-                throw new DomainException("El usuario de la orden debe de ser valido");
+                throw new DomainException("El usuario de la orden debe ser válido.");
             if (deliveryType == DeliveryTypes.Delivery &&
                 string.IsNullOrWhiteSpace(shippingAddress))
             {
