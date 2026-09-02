@@ -23,8 +23,8 @@ namespace Domain.Entities.Product
 
         private static void ValidateDiscount(decimal percentage, DateTimeOffset startDate, DateTimeOffset endDate)
         {
-            if(percentage <= 0 || percentage >= 90)
-                throw new DomainException("El porcentaje de descuento no puede ser 0 o 90");
+            if(percentage <= 0 || percentage > 90)
+                throw new DomainException("El porcentaje de descuento no puede ser menor a 0 o mayor a 90");
             if(startDate >= endDate)
                 throw new DomainException("La fecha de inicio del descuento debe ser anterior a la fecha de finalización.");
         }

@@ -28,7 +28,6 @@ namespace Persistence.Context
         #endregion
 
         #region Roles
-        public DbSet<Roles> Role { get; set; }
         public DbSet<UserRoles> UserRole { get; set; }
         #endregion
 
@@ -39,13 +38,11 @@ namespace Persistence.Context
 
         #region Payment
         public DbSet<Payments> Payment { get; set; }
-        public DbSet<PaymentMethods> PaymentMethod { get; set; }
         #endregion
 
         #region Order
         public DbSet<Orders> Order { get; set; }
         public DbSet<OrderItems> OrderItem { get; set; }
-        public DbSet<OrderStatuses> OrderStatus { get; set; }
         #endregion
 
         #region Notification
@@ -70,15 +67,7 @@ namespace Persistence.Context
         {
             base.OnModelCreating(modelBuilder);
 
-            
-            modelBuilder.Entity<Users>(entity =>
-            {
-                
-                entity.Property(e => e.Id)
-                      .HasColumnName("UserId");
-
-                entity.HasKey(e => e.Id);
-            });
+            modelBuilder.ApplyConfigurationsFromAssembly(typeof(SlowVibesDbContext).Assembly);
         }
 
     }

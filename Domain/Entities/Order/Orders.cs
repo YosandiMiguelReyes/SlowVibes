@@ -39,6 +39,13 @@ namespace Domain.Entities.Order
         {
             if(userId <= 0)
                 throw new DomainException("El usuario de la orden debe ser válido.");
+
+            if (!Enum.IsDefined(orderSource))
+                throw new DomainException("El origen de la orden no es válido.");
+
+            if (!Enum.IsDefined(deliveryType))
+                throw new DomainException("El tipo de delivery no es válido.");
+
             if (deliveryType == DeliveryTypes.Delivery &&
                 string.IsNullOrWhiteSpace(shippingAddress))
             {

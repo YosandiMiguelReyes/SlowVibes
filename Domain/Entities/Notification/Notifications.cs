@@ -46,17 +46,22 @@ namespace Domain.Entities.Notification
 
         public void MarkAsSent(DateTimeOffset sentAt)
         {
-            if (Status == NotificationStatus.Sent)
-                throw new DomainException(
-                    "Notification has already been sent.");
-
+            EnsureIsPending();
             Status = NotificationStatus.Sent;
             SentAt = sentAt;
         }
 
         public void MarkAsFailed()
         {
+            EnsureIsPending();
             Status = NotificationStatus.Failed;
+        }
+
+        public void EnsureIsPending()
+        {
+            if (Status != NotificationStatus.Pending)
+                throw new DomainException(
+                    "Solo se pueden modificar notificaciones pendientes.");
         }
     }
 }
