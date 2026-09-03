@@ -11,6 +11,19 @@ namespace Persistence.Configurations.OrderConfigurations
         {
             builder.HasKey(oi => oi.Id);
 
+            builder.Property(oi => oi.PurchasePrice)
+                .HasPrecision(18, 2);
+
+            builder.Property(oi => oi.UnitPrice)
+                .HasPrecision(18, 2);
+
+            builder.Property(oi => oi.DiscountApplied)
+                .HasPrecision(5, 2);
+
+            builder.Property(oi => oi.Profit)
+                .HasPrecision(18, 2);
+                
+
             builder.HasOne<Orders>()
                 .WithMany(oi => oi.Items)
                 .HasForeignKey(oi => oi.OrderId)

@@ -9,6 +9,7 @@ namespace Persistence.Configurations.SettingsConfigurations
         public void Configure(EntityTypeBuilder<Settings> builder)
         {
             builder.HasKey(s => s.Id);
+            builder.HasIndex(s => s.Key).IsUnique();
 
         }
     }

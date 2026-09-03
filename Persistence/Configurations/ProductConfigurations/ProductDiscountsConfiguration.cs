@@ -9,6 +9,7 @@ namespace Persistence.Configurations.ProductConfigurations
         public void Configure(EntityTypeBuilder<ProductDiscounts> builder)
         {
             builder.HasKey(pd => pd.Id);
+            builder.Property(pd => pd.Percentage).HasPrecision(5, 2);
 
             builder.HasOne<Products>()
                 .WithMany()
