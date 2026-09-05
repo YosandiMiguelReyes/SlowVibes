@@ -1,6 +1,8 @@
 ﻿
 
 using Domain.Entities.Order;
+using Domain.Entities.User;
+using Domain.Entities.Order.Enums;
 using Persistence.BaseRepository;
 using Persistence.Context;
 using Persistence.Interfaces.Order;
@@ -13,7 +15,8 @@ namespace Persistence.Repositories.Order
         {
             
         }
-        public Task<IEnumerable<Orders>> GetOrderByDateRange(DateTime startDate, DateTime endDate)
+
+        public Task<IEnumerable<Orders>> GetOrderByDateRange(DateTimeOffset startDate, DateTimeOffset endDate)
         {
             throw new NotImplementedException();
         }
@@ -23,17 +26,17 @@ namespace Persistence.Repositories.Order
             throw new NotImplementedException();
         }
 
-        public Task<IEnumerable<Orders>> GetOrdersByDeliveryTypeAsync(string deliveryType)
+        public Task<IEnumerable<Orders>> GetOrdersByDeliveryTypeAsync(DeliveryTypes deliveryType)
         {
             throw new NotImplementedException();
         }
 
-        public Task<IEnumerable<Orders>> GetOrdersBySourceAsync(string source)
+        public Task<IEnumerable<Orders>> GetOrdersBySourceAsync(OrderSources source)
         {
             throw new NotImplementedException();
         }
 
-        public Task<IEnumerable<Orders>> GetOrdersByStatusAsync(string status)
+        public Task<IEnumerable<Orders>> GetOrdersByStatusAsync(OrderStatuses status)
         {
             throw new NotImplementedException();
         }
@@ -50,7 +53,12 @@ namespace Persistence.Repositories.Order
 
         public Task<IEnumerable<Orders>> GetOrdersByUserNameAsync(string userName)
         {
-            throw new NotImplementedException();
+            var query = 
+                from order in _dbSet
+                join user in _context.Set<Users>()
+                on order.UserId equals user.Id
+                where(userName == user.userName)
+                select order;
         }
 
         public Task<IEnumerable<Orders>> GetOrdersOrderByDateAsync(bool ascending)

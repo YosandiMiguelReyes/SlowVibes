@@ -27,15 +27,20 @@ namespace Persistence.BaseRepository
 
         public virtual async Task<IEnumerable<TEntity>> FindAsync(Expression<Func<TEntity, bool>> predicate)
         {
-            return await _dbSet.Where(predicate).ToListAsync();
+            return await _dbSet
+            .AsNoTracking()
+            .Where(predicate)
+            .ToListAsync();
         }
 
         public virtual async Task<IEnumerable<TEntity>> GetAllAsync()
         {
-            return await _dbSet.ToListAsync();
+            return await _dbSet
+                .AsNoTracking()
+                .ToListAsync();
         }
 
-        public virtual async Task<TEntity> GetAsync(TId id)
+        public virtual async Task<TEntity?> GetAsync(TId id)
         {
             return await _dbSet.FindAsync(id);
         }
