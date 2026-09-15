@@ -2,7 +2,7 @@
 using Domain.Entities.Order;
 using Domain.Repositories;
 
-namespace Persistence.Interfaces.Order
+namespace Application.Contracts.Repositories.Order
 {
     public interface IOrderRepository : IBaseRepository<Orders, int>
     {

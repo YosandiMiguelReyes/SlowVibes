@@ -138,7 +138,7 @@ namespace Domain.Entities.Order
         private void RecalculateTotals()
         {
             TotalAmount = _items.Sum(item =>
-                item.UnitPrice *
+                item.SalePrice *
                 item.Quantity *
                 (1m - item.DiscountApplied / 100m));
 

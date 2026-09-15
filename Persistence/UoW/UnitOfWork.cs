@@ -3,11 +3,12 @@ using Domain.Entities.InventoryMovement;
 using Domain.Repositories;
 using Persistence.BaseRepository;
 using Persistence.Context;
-using Persistence.Interfaces.InventoryMovement;
+using Application.Contracts.Repositories.InventoryMovement;
+using Application.Contracts.Repositories.Order;
+using Application.Contracts.Repositories.Payment;
+using Application.Contracts.Repositories.Product;
+using Application.Contracts.Repositories.Users;
 using Persistence.Interfaces.Order;
-using Persistence.Interfaces.Payment;
-using Persistence.Interfaces.Product;
-using Persistence.Interfaces.Users;
 using Persistence.Repositories.InventoryMovement;
 using Persistence.Repositories.Order;
 using Persistence.Repositories.Payment;
@@ -16,7 +17,7 @@ using Persistence.Repositories.Users;
 
 namespace Persistence.UoW
 {
-    public class UnitOfWork : IUnitOfWork
+    public class UnitOfWork : IUnitOfWork, Application.Contracts.Persistence.IUnitOfWork
     {
         private readonly SlowVibesDbContext _context;
         public UnitOfWork(SlowVibesDbContext context)

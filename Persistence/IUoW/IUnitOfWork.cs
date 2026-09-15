@@ -1,11 +1,12 @@
 ﻿
 
 using Domain.Repositories;
-using Persistence.Interfaces.InventoryMovement;
+using Application.Contracts.Repositories.InventoryMovement;
+using Application.Contracts.Repositories.Order;
+using Application.Contracts.Repositories.Payment;
+using Application.Contracts.Repositories.Product;
+using Application.Contracts.Repositories.Users;
 using Persistence.Interfaces.Order;
-using Persistence.Interfaces.Payment;
-using Persistence.Interfaces.Product;
-using Persistence.Interfaces.Users;
 
 namespace Persistence.UoW
 {

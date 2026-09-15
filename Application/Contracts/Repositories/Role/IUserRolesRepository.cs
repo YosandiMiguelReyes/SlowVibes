@@ -2,7 +2,7 @@
 using Domain.Repositories;
 using Domain.Result;
 
-namespace Persistence.Interfaces.Role
+namespace Application.Contracts.Repositories.Role
 {
     public interface IUserRolesRepository : IBaseRepository<UserRoles, int>
     {

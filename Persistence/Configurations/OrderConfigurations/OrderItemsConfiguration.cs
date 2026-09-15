@@ -14,7 +14,7 @@ namespace Persistence.Configurations.OrderConfigurations
             builder.Property(oi => oi.PurchasePrice)
                 .HasPrecision(18, 2);
 
-            builder.Property(oi => oi.UnitPrice)
+            builder.Property(oi => oi.SalePrice)
                 .HasPrecision(18, 2);
 
             builder.Property(oi => oi.DiscountApplied)
