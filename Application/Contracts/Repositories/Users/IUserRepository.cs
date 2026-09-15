@@ -1,8 +1,8 @@
 ﻿using Domain.Entities.User;
 using Domain.Repositories;
-using Persistence.DTO.User;
+using Application.DTOs.User;
 
-namespace Persistence.Interfaces.Users
+namespace Application.Contracts.Repositories.Users
 {
     public interface IUserRepository : IBaseRepository<Domain.Entities.User.Users, int>
     {

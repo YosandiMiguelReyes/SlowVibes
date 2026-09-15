@@ -2,9 +2,9 @@
 
 using Domain.Entities.Product;
 using Domain.Repositories;
-using Persistence.DTO.Product;
+using Application.DTOs.Product;
 
-namespace Persistence.Interfaces.Product
+namespace Application.Contracts.Repositories.Product
 {
     public interface IProductsRepository : IBaseRepository<Products, int>
     {

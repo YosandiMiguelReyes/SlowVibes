@@ -3,8 +3,8 @@ using Domain.Repositories;
 using Microsoft.EntityFrameworkCore;
 using Persistence.BaseRepository;
 using Persistence.Context;
-using Persistence.Interfaces.Users;
-using Persistence.DTO.User;
+using Application.Contracts.Repositories.Users;
+using Application.DTOs.User;
 using System.Linq.Expressions;
 using Persistence.Mappers.UserMappers;
 

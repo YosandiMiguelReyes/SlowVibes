@@ -2,9 +2,9 @@
 
 using Domain.Entities.Payment;
 using Domain.Repositories;
-using Persistence.DTO.Payment;
+using Application.DTOs.Payment;
 
-namespace Persistence.Interfaces.Payment
+namespace Application.Contracts.Repositories.Payment
 {
     public interface IPaymentsRepository : IBaseRepository<Payments, int>
     {

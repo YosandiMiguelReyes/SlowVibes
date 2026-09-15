@@ -3,7 +3,7 @@
 using Domain.Entities.InventoryMovement;
 using Domain.Repositories;
 
-namespace Persistence.Interfaces.InventoryMovement
+namespace Application.Contracts.Repositories.InventoryMovement
 {
     public interface IInventoryMovementsRepository : IBaseRepository<InventoryMovements, int>
     {

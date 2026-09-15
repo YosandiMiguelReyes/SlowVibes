@@ -2,7 +2,7 @@
 using Domain.Entities.InventoryMovement;
 using Persistence.BaseRepository;
 using Persistence.Context;
-using Persistence.Interfaces.InventoryMovement;
+using Application.Contracts.Repositories.InventoryMovement;
 
 namespace Persistence.Repositories.InventoryMovement
 {
