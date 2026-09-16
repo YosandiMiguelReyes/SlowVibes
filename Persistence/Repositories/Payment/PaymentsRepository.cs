@@ -4,8 +4,8 @@ using Domain.Entities.Payment;
 using Microsoft.EntityFrameworkCore;
 using Persistence.BaseRepository;
 using Persistence.Context;
-using Persistence.DTO.Payment;
-using Persistence.Interfaces.Payment;
+using Application.DTOs.Payment;
+using Application.Contracts.Repositories.Payment;
 using Persistence.Mappers.PaymentMappers;
 
 namespace Persistence.Repositories.Payment

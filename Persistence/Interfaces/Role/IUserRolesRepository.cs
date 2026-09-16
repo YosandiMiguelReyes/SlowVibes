@@ -1,6 +1,6 @@
 ﻿using Domain.Entities.Roles;
 using Domain.Repositories;
-using Domain.Result;
+using Application.Result;
 
 namespace Persistence.Interfaces.Role
 {

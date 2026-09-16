@@ -1,5 +1,5 @@
 ﻿using Domain.Entities.User;
-using Persistence.DTO.User;
+using Application.DTOs.User;
 using System;
 using System.Collections.Generic;
 using System.Linq.Expressions;

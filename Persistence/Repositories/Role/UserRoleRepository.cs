@@ -2,8 +2,8 @@ using Domain.Entities.Roles;
 using Microsoft.EntityFrameworkCore;
 using Persistence.BaseRepository;
 using Persistence.Context;
-using Persistence.Interfaces.Role;
-using Domain.Result;
+using Application.Contracts.Repositories.Role;
+using Application.Result;
 
 namespace Persistence.Repositories.Role
 {

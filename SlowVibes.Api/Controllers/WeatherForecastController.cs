@@ -1,6 +1,4 @@
 using Microsoft.AspNetCore.Mvc;
-using Persistence.UoW;
-using Domain.Entities.User;
 
 namespace SlowVibes.Api.Controllers
 {
@@ -8,13 +6,6 @@ namespace SlowVibes.Api.Controllers
     [Route("[controller]")]
     public class WeatherForecastController : ControllerBase
     {
-        IUnitOfWork _unitOfWork;
-
-        public WeatherForecastController(IUnitOfWork unitOfWork)
-        {
-            _unitOfWork = unitOfWork;
-        }
-
         private static readonly string[] Summaries =
         [
             "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching"
@@ -32,23 +23,5 @@ namespace SlowVibes.Api.Controllers
             .ToArray();
         }
 
-        [HttpGet("test")]
-        public async Task<IActionResult> GetWithDb()
-        {
-            try
-            {
-                var users = await _unitOfWork.Repository<Users, int>().GetAllAsync();
-                return Ok(new
-                {
-                    Status = "Conexion exitosa",
-                    DataBaseCount = users.Count(),
-                    Source = "Unit of work"
-                });
-            }
-            catch (Exception ex)
-            {
-                return BadRequest($"Error de conexion {ex.Message}");
-            }
-        }
     }
 }

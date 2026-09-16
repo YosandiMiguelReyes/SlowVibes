@@ -1,4 +1,6 @@
 <Solution>
+  <Project Path="Application/Application.csproj" Id="7eedc327-9c1f-4744-83d0-58c0d033b27e" />
+  <Project Path="Application.Tests/Application.Tests.csproj" Id="7af8eb4b-bc71-44d8-a00d-2a54b6a6b5c4" />
   <Project Path="Domain/Domain.csproj" Id="87f0037a-7af2-43a6-8449-451bdb62a670" />
   <Project Path="Persistence/Persistence.csproj" Id="77785e48-2be0-411c-ab22-0cd834edb7c4" />
   <Project Path="SlowVibes.Api/SlowVibes.Api.csproj" Id="5b4f3a74-da8b-4b97-b065-3066c29399d6" />

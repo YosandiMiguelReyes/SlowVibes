@@ -2,8 +2,8 @@
 using Microsoft.EntityFrameworkCore;
 using Persistence.BaseRepository;
 using Persistence.Context;
-using Persistence.DTO.Product;
-using Persistence.Interfaces.Product;
+using Application.DTOs.Product;
+using Application.Contracts.Repositories.Product;
 using Persistence.Mappers.ProductMappers;
 
 

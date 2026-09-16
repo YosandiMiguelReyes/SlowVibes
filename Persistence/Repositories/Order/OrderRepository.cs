@@ -5,12 +5,12 @@ using Domain.Entities.User;
 using Domain.Entities.Order.Enums;
 using Persistence.BaseRepository;
 using Persistence.Context;
-using Persistence.Interfaces.Order;
+using Application.Contracts.Repositories.Order;
 using Microsoft.EntityFrameworkCore;
 
 namespace Persistence.Repositories.Order
 {
-    internal class OrderRepository : BaseRepository<Orders, int>, IOrderRepository
+    public class OrderRepository : BaseRepository<Orders, int>, IOrderRepository
     {
         public OrderRepository(SlowVibesDbContext context) : base(context)
         {

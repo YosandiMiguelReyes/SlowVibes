@@ -1,5 +1,5 @@
 using Domain.Entities.Product;
-using Persistence.DTO.Product;
+using Application.DTOs.Product;
 using System;
 using System.Collections.Generic;
 using System.Linq.Expressions;
