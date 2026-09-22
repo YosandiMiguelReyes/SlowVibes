@@ -1,4 +1,4 @@
-﻿namespace Application.DTOs.Order.Responses
+﻿namespace Application.DTOs.Order.Responses.CreateOrder
 {
     public record CreateOrderItemResponse
     {

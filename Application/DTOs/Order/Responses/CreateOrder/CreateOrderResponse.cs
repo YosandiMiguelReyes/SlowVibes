@@ -1,6 +1,6 @@
 ﻿using Domain.Entities.Order.Enums;
 
-namespace Application.DTOs.Order.Responses
+namespace Application.DTOs.Order.Responses.CreateOrder
 {
     public record CreateOrderResponse
     {

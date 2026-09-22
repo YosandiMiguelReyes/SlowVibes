@@ -1,6 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 
-namespace Application.DTOs.Order.Requests;
+namespace Application.DTOs.Order.Requests.CreateOrder;
 
 public record CreateOrderItemRequest
 {

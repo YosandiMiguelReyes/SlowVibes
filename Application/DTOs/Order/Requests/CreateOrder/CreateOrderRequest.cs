@@ -1,7 +1,7 @@
 using System.ComponentModel.DataAnnotations;
 using Domain.Entities.Order.Enums;
 
-namespace Application.DTOs.Order.Requests;
+namespace Application.DTOs.Order.Requests.CreateOrder;
 
 public record CreateOrderRequest
 {
