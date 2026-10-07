@@ -1,4 +1,4 @@
-using Domain.Entities.Product;
+/*using Domain.Entities.Product;
 using Application.DTOs.Product;
 using System;
 using System.Collections.Generic;
@@ -57,4 +57,4 @@ namespace Persistence.Mappers.ProductMappers
 
         };
     }
-}
+}*/

@@ -1,6 +1,6 @@
-﻿namespace Application.DTOs.Order.Responses.CreateOrder
-{
-    public record CreateOrderItemResponse
+namespace Application.DTOs.Order.Responses.UpdateQuantity;
+
+    public record UpdateOrderItemQuantityResponse
     {
         public string ProductName { get; init; }
         public int ProductId { get; init; }
@@ -9,4 +9,3 @@
         public decimal SalePrice { get; init; }
         public decimal DiscountApplied { get; init; }
     }
-}

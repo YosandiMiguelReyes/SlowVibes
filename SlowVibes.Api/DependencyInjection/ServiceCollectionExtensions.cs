@@ -9,6 +9,9 @@ using Persistence.Repositories.Order;
 using Persistence.Repositories.Product;
 using Persistence.Repositories.Users;
 using Persistence.UoW;
+using Application.UseCases.Order.AddOrderItem;
+using Application.UseCases.Order.RemoveOrderItem;
+using Application.UseCases.Order.UpdateQuantity;
 
 namespace SlowVibes.Api.DependencyInjection;
 
@@ -30,6 +33,9 @@ public static class ServiceCollectionExtensions
         services.AddScoped<IProductDiscountsRepository, ProductDiscountRepository>();
         services.AddScoped<IOrderRepository, OrderRepository>();
         services.AddScoped<CreateOrderUseCase>();
+        services.AddScoped<AddOrderItemUseCase>();
+        services.AddScoped<RemoveOrderItemUseCase>();
+        services.AddScoped<UpdateOrderItemQuantityUseCase>();
 
         return services;
     }
