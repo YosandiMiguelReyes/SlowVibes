@@ -61,7 +61,7 @@ namespace Domain.Entities.Order
         }
 
 
-                public void AddItem(OrderItems item)
+        public void AddItem(OrderItems item)
         {
             if (OrderStatus != OrderStatuses.Pending)
                 throw new DomainException(
@@ -82,6 +82,7 @@ namespace Domain.Entities.Order
             else
             {
                 _items.Add(item);
+                
             }
 
             RecalculateTotals();
@@ -133,6 +134,22 @@ namespace Domain.Entities.Order
                     "Una orden completada no puede ser cancelada.");
 
             OrderStatus = OrderStatuses.Cancelled;
+        }
+        public void UpdateQuantity(int productId, int quantity)
+        {
+            if (OrderStatus == OrderStatuses.Cancelled)
+                throw new DomainException(
+                    "La orden ya está cancelada.");
+
+            var item = _items.FirstOrDefault(
+                x => x.ProductId == productId);
+
+            if (item is null)
+                throw new DomainException(
+                    "El producto no pertenece a la orden.");
+
+            item.ChangeQuantity(quantity);
+            RecalculateTotals();
         }
 
         private void RecalculateTotals()

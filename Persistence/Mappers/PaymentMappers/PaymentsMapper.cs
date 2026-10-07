@@ -1,4 +1,4 @@
-using Domain.Entities.Payment;
+/*using Domain.Entities.Payment;
 using System;
 using System.Collections.Generic;
 using System.Linq.Expressions;
@@ -20,4 +20,4 @@ namespace Persistence.Mappers.PaymentMappers
             PaymentDate = p.PaymentDate,
         };
     }
-}
+}*/

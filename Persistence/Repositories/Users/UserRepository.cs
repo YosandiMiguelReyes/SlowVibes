@@ -6,7 +6,7 @@ using Persistence.Context;
 using Application.Contracts.Repositories.Users;
 using Application.DTOs.User;
 using System.Linq.Expressions;
-using Persistence.Mappers.UserMappers;
+//using Persistence.Mappers.UserMappers;
 
 
 namespace Persistence.Repositories.Users
@@ -18,79 +18,49 @@ namespace Persistence.Repositories.Users
 
         }
 
-        //---------------------------ADMIN ONLY-------------------------------------------
-        public async Task<AdminUserWithRole?> AdminGetByCredentialsWithRolesAsync(string identifier)
+        public Task<AdminUserWithRole?> AdminGetByCredentialsWithRolesAsync(string identifier)
         {
-
-            return await _dbSet
-                .Where(u => (u.Email == identifier || u.UserName == identifier))
-                .Select(UserMapper.AsAdminUserWithRole).FirstOrDefaultAsync();
+            throw new NotImplementedException();
         }
 
-        public async Task<IEnumerable<AdminUserWithRole>> AdminGetUsersByRoleAsync(string roleName)
+        public Task<IEnumerable<AdminUserWithRole>> AdminGetUsersByRoleAsync(string roleName)
         {
-            return await _dbSet
-                .Where(u => u.UsersRoles.Any(ur => ur.Role.Name == roleName))
-                .Select(UserMapper.AsAdminUserWithRole).ToListAsync();
+            throw new NotImplementedException();
         }
 
-        public async Task<IEnumerable<AdminUserWithRole>> AdminGetUsersByStatusAsync(bool status)
+        public Task<IEnumerable<AdminUserWithRole>> AdminGetUsersByStatusAsync(bool status)
         {
-            return await _dbSet
-                .Where(u => u.IsActive == status)
-                .Select(UserMapper.AsAdminUserWithRole).ToListAsync();
+            throw new NotImplementedException();
         }
 
-        //----------------------------------------------------------------------
-
-
-        public async Task<UserWithRolesDTO?> GetByCredentialsWithRolesAsync(string identifier)
+        public Task<UserWithRolesDTO?> GetByCredentialsWithRolesAsync(string identifier)
         {
-            return await _dbSet
-                .Where(u => (u.Email == identifier || u.UserName == identifier) && u.IsActive == true)
-                .Select(UserMapper.AsUserWithRole).FirstOrDefaultAsync();
-
+            throw new NotImplementedException();
         }
 
-        public async Task<IEnumerable<UserWithRolesDTO>> GetUsersByRoleAsync(string roleName)
+        public Task<IEnumerable<UserWithRolesDTO>> GetUsersByRoleAsync(string roleName)
         {
-            return await _dbSet
-                .Where(u => u.UsersRoles.Any(ur => ur.Role.Name == roleName) && u.IsActive == true)
-                .Select(UserMapper.AsUserWithRole).ToListAsync();
+            throw new NotImplementedException();
         }
 
-
-        //Staff only
-        public async Task<IEnumerable<UserWithRolesDTO>> GetUsersByStatusAsync(bool status)
+        public Task<IEnumerable<UserWithRolesDTO>> GetUsersByStatusAsync(bool status)
         {
-            return await _dbSet
-                .Where(u => u.IsActive == status)
-                .Select(UserMapper.AsUserWithRole).ToListAsync();
+            throw new NotImplementedException();
         }
 
-        //----------------------------------------------------------------------
-
-        public async Task<bool> IsEmailUniqueAsync(string email)
+        public Task<bool> IsEmailUniqueAsync(string email)
         {
-            return !await _dbSet.AnyAsync(u => u.Email == email);
+            throw new NotImplementedException();
         }
 
-        public async Task<bool> IsUsernameUniqueAsync(string username)
+        public Task<bool> IsUsernameUniqueAsync(string username)
         {
-            return !await _dbSet.AnyAsync(u => u.UserName == username);
+            throw new NotImplementedException();
         }
 
-        public async Task UpdateStatusAsync(int userId, bool isActive)
+        public Task UpdateStatusAsync(int userId, bool isActive)
         {
-            var user = await GetAsync(userId);
-
-            if (user == null)
-            {
-                throw new Exception($"Usuario con ID {userId} no encontrado.");
-            }
-
-            user.IsActive = isActive;
-
+            throw new NotImplementedException();
         }
     }
 }

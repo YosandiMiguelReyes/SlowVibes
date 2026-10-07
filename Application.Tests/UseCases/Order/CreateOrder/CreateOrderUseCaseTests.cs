@@ -4,7 +4,7 @@ using Application.Contracts.Persistence;
 using Application.Contracts.Repositories.Order;
 using Application.Contracts.Repositories.Product;
 using Application.Contracts.Repositories.Users;
-using Application.DTOs.Order.Requests;
+using Application.DTOs.Order.Requests.CreateOrder;
 using Application.UseCases.Order.CreateOrder;
 using Domain.Base;
 using Domain.Entities.Order;
@@ -56,13 +56,13 @@ public sealed class CreateOrderUseCaseTests
 
         var response = await useCase.ExecuteAsync(CreateValidRequest(product.Id, quantity: 3));
 
-        Assert.Equal(50, response.OrderId);
-        Assert.Equal("yosandi", response.UserName);
-        Assert.Equal(27m, response.TotalAmount);
+        Assert.Equal(50, response.Value.OrderId);
+        Assert.Equal("yosandi", response.Value.UserName);
+        Assert.Equal(27m, response.Value.TotalAmount);
         Assert.Equal(2, product.Stock);
-        Assert.Single(response.Items);
-        Assert.Equal(27m, response.Items[0].SubTotal);
-        Assert.Equal(10m, response.Items[0].DiscountApplied);
+        Assert.Single(response.Value.Items);
+        Assert.Equal(27m, response.Value.Items[0].SubTotal);
+        Assert.Equal(10m, response.Value.Items[0].DiscountApplied);
         productsRepository.Verify(repository => repository.Update(product), Times.Once);
         ordersRepository.Verify(repository => repository.AddAsync(It.IsAny<Orders>()), Times.Once);
         unitOfWork.Verify(work => work.SaveChangesAsync(), Times.Once);

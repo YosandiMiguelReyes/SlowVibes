@@ -1,4 +1,4 @@
-﻿using Domain.Entities.User;
+﻿/*using Domain.Entities.User;
 using Application.DTOs.User;
 using System;
 using System.Collections.Generic;
@@ -30,4 +30,4 @@ namespace Persistence.Mappers.UserMappers
             Roles = u.UsersRoles.Select(ur => ur.Role.Name).ToList()
         };
     }
-}
+}*/

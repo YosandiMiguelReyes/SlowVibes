@@ -1,8 +1,7 @@
-﻿namespace Application.DTOs.Order.Responses
+namespace Application.DTOs.Order.Responses.RemoveOrderItem
 {
-    public record CreateOrderItemResponse
+    public record RemoveOrderItemReponse
     {
-        public int OrderId { get; init; }
         public string ProductName { get; init; }
         public int ProductId { get; init; }
         public decimal SubTotal { get; init; }
