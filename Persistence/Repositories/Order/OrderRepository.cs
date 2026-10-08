@@ -109,5 +109,12 @@ namespace Persistence.Repositories.Order
             query = ascending ? query.OrderBy(o => o.TotalProfit) : query.OrderByDescending(o => o.TotalProfit);
             return await query.ToListAsync();
         }
+
+        public async Task<Orders?> GetOrderWithItemsAsync(int orderId)
+        {
+            return await _dbSet
+                .Include(o => o.Items)
+                .FirstOrDefaultAsync(o => o.Id == orderId);
+        }
     }
 }

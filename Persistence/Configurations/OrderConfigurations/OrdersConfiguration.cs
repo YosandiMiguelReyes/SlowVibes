@@ -12,7 +12,8 @@ namespace Persistence.Configurations.OrderConfigurations
             builder.HasKey(o => o.Id);
             builder.Property(o => o.ShippingAddress).HasMaxLength(255);
             builder.Property(o => o.TotalAmount).HasPrecision(18, 2);
-            
+            builder.Property(o => o.TotalProfit).HasPrecision(18, 2);
+
 
             builder.HasOne<Users>()
                 .WithMany()

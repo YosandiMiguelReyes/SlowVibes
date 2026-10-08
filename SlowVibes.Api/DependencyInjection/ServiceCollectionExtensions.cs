@@ -21,8 +21,8 @@ public static class ServiceCollectionExtensions
         this IServiceCollection services,
         IConfiguration configuration)
     {
-        var connectionString = configuration.GetConnectionString("LaptopConnection")
-            ?? throw new InvalidOperationException("La cadena de conexión 'LaptopConnection' no está configurada.");
+        var connectionString = configuration.GetConnectionString("DellLaptopConnection")
+            ?? throw new InvalidOperationException("La cadena de conexión no está configurada.");
 
         services.AddDbContext<SlowVibesDbContext>(options =>
             options.UseSqlServer(connectionString));

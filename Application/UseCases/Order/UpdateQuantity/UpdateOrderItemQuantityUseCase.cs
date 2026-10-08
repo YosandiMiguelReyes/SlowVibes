@@ -30,7 +30,7 @@ public sealed class UpdateOrderItemQuantityUseCase(IOrderRepository orderReposit
 
         try
         {
-            var order = await orderRepository.GetAsync(orderId);
+            var order = await orderRepository.GetOrderWithItemsAsync(orderId);
             if(order is null)
             {
                 return OperationResult<UpdateOrderItemsQuantityResponse>.Failure("No se pudo encontrado la orden");

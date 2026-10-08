@@ -22,5 +22,7 @@ namespace Application.Contracts.Repositories.Order
         Task<IEnumerable<Orders>> GetOrdersOrderByTotalProfitAsync(bool ascending);
         Task<IEnumerable<Orders>> GetOrdersOrderByTotalAmountAsync(bool ascending);
         Task<IEnumerable<Orders>> GetOrdersOrderByDateAsync(bool ascending);
+
+        Task<Orders?> GetOrderWithItemsAsync(int orderId);
     }
 }
