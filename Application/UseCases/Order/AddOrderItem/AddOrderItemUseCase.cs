@@ -6,6 +6,8 @@ using Application.Contracts.Repositories.Product;
 using Application.Result;
 using Domain.Entities.Order;
 using Domain.Exceptions;
+using Domain.Entities.Product;
+using Microsoft.AspNetCore.Http.Features;
 
 namespace Application.UseCases.Order.AddOrderItem
 {
@@ -20,24 +22,26 @@ namespace Application.UseCases.Order.AddOrderItem
         {
             ArgumentNullException.ThrowIfNull(request);
 
+            if(request.Items is null || request.Items.Count == 0)
+            {
+                return OperationResult<AddOrderItemsResponse>.Failure("La orden debe contener al menos un producto.");
+            }
+
+            var unique = request.Items.DistinctBy(i => i.ProductId).ToList();
+            var products = new Dictionary<int, Products>();
+
             try
             {
-
-                if(request.Items is null || request.Items.Count == 0)
-                {
-                    return OperationResult<AddOrderItemsResponse>.Failure("La orden debe contener al menos un producto.");
-                }
-                var order = await orderRepository.GetAsync(orderId);
+                var order = await orderRepository.GetOrderWithItemsAsync(orderId);
 
                 if (order is null)
                 {
                     return OperationResult<AddOrderItemsResponse>.Failure("No se pudo encontrar la order");
                 }
-                //I won't validate the status of the order since the entity does (Domain)
 
-                var produtsName = new Dictionary<int, string>();
-
-                foreach(var requestedItems in request.Items)
+//-------------------------------------------------------------------------------------------------------------------------------------------
+                
+                foreach(var requestedItems in unique)
                 {
                     var product = await productsRepository.GetAsync(requestedItems.ProductId);
 
@@ -50,10 +54,33 @@ namespace Application.UseCases.Order.AddOrderItem
                         return OperationResult<AddOrderItemsResponse>.Failure($"El producto '{product.Name}' no está disponible.");
                     }
 
-                    product.DecreaseStock(requestedItems.Quantity);
+                    products [product.Id] = product;
+
+                }
+//------------------------------------------------------------------------------------------------------------------------------------
+
+                foreach(var item in order.Items)
+                {
+                    if(!products.ContainsKey(item.ProductId))
+                    {
+                        var product = await productsRepository.GetAsync(item.ProductId);
+
+                        if(product is null)
+                        {
+                            return OperationResult<AddOrderItemsResponse>.Failure(
+                            $"No se encontró el producto {item.ProductId}.");
+                        }
+
+                    products[item.ProductId] = product;
+                    }
+                }
+
+//-------------------------------------------------------------------------------------------------------------------------------------------
+                foreach(var item in unique)
+                {
 
                     var discounts = await productDiscountsRepository.FindAsync
-                        (discount => discount.ProductId == product.Id);
+                        (discount => discount.ProductId == products[item.ProductId].Id);
 
                     var discountApplied = discounts
                         .Where(discount => discount.IsCurrentlyActive)
@@ -64,19 +91,16 @@ namespace Application.UseCases.Order.AddOrderItem
                     order.AddItem(
                         OrderItems.CreateOrderItems
                         (
-                            product.Id,
-                            requestedItems.Quantity,
-                            product.PurchasePrice,
-                            product.SalePrice,
+                            products[item.ProductId].Id,
+                            item.Quantity,
+                            products[item.ProductId].PurchasePrice,
+                            products[item.ProductId].SalePrice,
                             discountApplied
                         ));
 
-                    productsRepository.Update(product);
-
-                    produtsName [product.Id] = product.Name;
+                        products[item.ProductId].DecreaseStock(item.Quantity);
 
                 }
-                orderRepository.Update(order);
                 await unitOfWork.SaveChangesAsync();
 
         var response = new AddOrderItemsResponse 
@@ -93,7 +117,7 @@ namespace Application.UseCases.Order.AddOrderItem
                 .Select(item => new AddOrderItemResponse
                 {
                     ProductId = item.ProductId,
-                    ProductName = produtsName[item.ProductId],
+                    ProductName = products[item.ProductId].Name,
                     Quantity = item.Quantity,
                     SalePrice = item.SalePrice,
                     DiscountApplied = item.DiscountApplied,

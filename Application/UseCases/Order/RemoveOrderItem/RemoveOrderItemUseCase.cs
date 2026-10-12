@@ -26,7 +26,7 @@ public sealed class RemoveOrderItemUseCase(IOrderRepository orderRepository,
 
         try
         {
-            var order = await orderRepository.GetAsync(orderId);
+            var order = await orderRepository.GetOrderWithItemsAsync(orderId);
 
             if(order is null)
             {

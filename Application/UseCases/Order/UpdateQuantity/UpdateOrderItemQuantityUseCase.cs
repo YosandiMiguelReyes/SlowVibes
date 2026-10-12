@@ -24,8 +24,7 @@ public sealed class UpdateOrderItemQuantityUseCase(IOrderRepository orderReposit
         }
 
         var unique = request.Items.DistinctBy(item => item.ProductId).ToList();
-        var productsToUpdate = new Dictionary<int, Products>();
-        var remainingProductNames = new Dictionary<int, string>();
+        var products = new Dictionary<int, Products>();
         var quantityDifference = new Dictionary<int, int>();
 
         try
@@ -60,22 +59,26 @@ public sealed class UpdateOrderItemQuantityUseCase(IOrderRepository orderReposit
                     return OperationResult<UpdateOrderItemsQuantityResponse>.Failure($"No hay suficiente producto en stock para el producto{product.Name}");
                 }
 
-                productsToUpdate[item.ProductId] = product;
+                products[item.ProductId] = product;
                 quantityDifference[item.ProductId] = difference;
                 
             }
 
             foreach(var item in order.Items)
             {
-                var product = await productsRepository.GetAsync(item.ProductId);
-
-                if(product is null)
+                if(!products.ContainsKey(item.ProductId))
                 {
-                    return OperationResult<UpdateOrderItemsQuantityResponse>.Failure(
-                    $"No se encontró el producto {item.ProductId}.");
+                    var product = await productsRepository.GetAsync(item.ProductId);
+
+                    if(product is null)
+                    {
+                        return OperationResult<UpdateOrderItemsQuantityResponse>.Failure(
+                        $"No se encontró el producto {item.ProductId}.");
+                    }
+
+                    products[item.ProductId] = product;
                 }
 
-                remainingProductNames[item.ProductId] = product.Name;
             }
 
             foreach(var item in unique)
@@ -84,11 +87,11 @@ public sealed class UpdateOrderItemQuantityUseCase(IOrderRepository orderReposit
 
                 if(quantityDifference[item.ProductId] < 0)
                 {
-                    productsToUpdate[item.ProductId].IncreaseStock(Math.Abs(quantityDifference[item.ProductId]));
+                    products[item.ProductId].IncreaseStock(Math.Abs(quantityDifference[item.ProductId]));
                 }
                 if(quantityDifference[item.ProductId] > 0)
                 {
-                    productsToUpdate[item.ProductId].DecreaseStock(quantityDifference[item.ProductId]);
+                    products[item.ProductId].DecreaseStock(quantityDifference[item.ProductId]);
                 }
                 
             }
@@ -106,7 +109,7 @@ public sealed class UpdateOrderItemQuantityUseCase(IOrderRepository orderReposit
                 Items = order.Items
                     .Select(item => new UpdateOrderItemQuantityResponse
                     {
-                        ProductName = remainingProductNames[item.ProductId],
+                        ProductName = products[item.ProductId].Name,
                         ProductId = item.ProductId,
                         Quantity = item.Quantity,
                         SalePrice = item.SalePrice,
