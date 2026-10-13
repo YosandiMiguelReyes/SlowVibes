@@ -76,6 +76,12 @@ namespace Domain.Entities.Order
 
             if (existingItem is not null)
             {
+                if (item.Quantity > int.MaxValue - existingItem.Quantity)
+                {
+                    throw new DomainException(
+                        "La cantidad total del producto supera el máximo permitido.");
+                }
+                
                 existingItem.ChangeQuantity(
                     existingItem.Quantity + item.Quantity);
             }
@@ -137,9 +143,9 @@ namespace Domain.Entities.Order
         }
         public void UpdateQuantity(int productId, int quantity)
         {
-            if (OrderStatus == OrderStatuses.Cancelled)
+            if (OrderStatus != OrderStatuses.Pending)
                 throw new DomainException(
-                    "La orden ya está cancelada.");
+                    "Solo se pueden actualizar cantidades en una orden pendiente.");
 
             var item = _items.FirstOrDefault(
                 x => x.ProductId == productId);

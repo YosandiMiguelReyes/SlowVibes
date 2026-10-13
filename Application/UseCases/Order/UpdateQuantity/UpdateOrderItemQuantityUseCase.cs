@@ -4,6 +4,7 @@ using Application.Contracts.Repositories.Product;
 using Application.DTOs.Order.Requests.UpdateQuantity;
 using Application.DTOs.Order.Responses.UpdateQuantity;
 using Application.Result;
+using Domain.Entities.Order.Enums;
 using Domain.Entities.Product;
 using Domain.Exceptions;
 
@@ -16,58 +17,103 @@ public sealed class UpdateOrderItemQuantityUseCase(IOrderRepository orderReposit
 {
     public async Task<OperationResult<UpdateOrderItemsQuantityResponse>> ExecuteAsync(int orderId, UpdateOrderItemsQuantityRequest request)
     {
+
+
         ArgumentNullException.ThrowIfNull(request);
+
+        if(orderId <= 0)
+        {
+            return OperationResult<UpdateOrderItemsQuantityResponse>.Failure(
+                "El ID de la orden no es válido.");
+        }
 
         if(request.Items == null || request.Items.Count == 0)
         {
-            return OperationResult<UpdateOrderItemsQuantityResponse>.Failure("La orden debe contener al menos un producto.");
+            return OperationResult<UpdateOrderItemsQuantityResponse>.Failure(
+                "La orden debe contener al menos un producto.");
+        }
+        if(request.Items.Any(item => item is null))
+        {
+            return OperationResult<UpdateOrderItemsQuantityResponse>.Failure(
+                "La lista contiene un artículo inválido.");
+        }
+        if(request.Items.Any(item => 
+            item.ProductId <= 0 || item.Quantity <= 0))
+        {
+            return OperationResult<UpdateOrderItemsQuantityResponse>.Failure(
+                "Cada producto debe tener un ID y una cantidad mayores que cero.");
         }
 
-        var unique = request.Items.DistinctBy(item => item.ProductId).ToList();
+        var groupedItems = request.Items.GroupBy(item => item.ProductId)
+            .Select(group => new
+            {
+                ProductId = group.Key,
+                Quantity = group.Sum(item => (long)item.Quantity)
+            })
+            .ToList();
+
+        if(groupedItems.Any(item => item.Quantity > int.MaxValue))
+        {
+            return OperationResult<UpdateOrderItemsQuantityResponse>.Failure(
+                "La cantidad total del producto supera el máximo permitido.");
+        }
+
         var products = new Dictionary<int, Products>();
         var quantityDifference = new Dictionary<int, int>();
 
         try
         {
             var order = await orderRepository.GetOrderWithItemsAsync(orderId);
+
             if(order is null)
             {
-                return OperationResult<UpdateOrderItemsQuantityResponse>.Failure("No se pudo encontrado la orden");
+                return OperationResult<UpdateOrderItemsQuantityResponse>.Failure(
+                    "No se pudo encontrado la orden");
             }
 
-            foreach(var item in unique)
+            if(order.OrderStatus != OrderStatuses.Pending)
             {
-                var line = order.Items.FirstOrDefault(Items => Items.ProductId == item.ProductId);
+                return OperationResult<UpdateOrderItemsQuantityResponse>.Failure(
+                    "Solo se pueden actualizar productos de una orden pendiente");
+            }
 
-                if(line is null)
-                {
-                    return OperationResult<UpdateOrderItemsQuantityResponse>.Failure("No se pudo encontrado el producto en esta order"); 
-                }
+            foreach(var item in groupedItems)
+            {
 
                 var product = await productsRepository.GetAsync(item.ProductId);
 
                 if(product is null)
                 {
-                    return OperationResult<UpdateOrderItemsQuantityResponse>.Failure("No se pudo encontrado el producto");
+                    return OperationResult<UpdateOrderItemsQuantityResponse>.Failure(
+                        "No se pudo encontrado el producto");
                 }
 
+                var line = order.Items.FirstOrDefault(Items => Items.ProductId == item.ProductId);
+
+                if(line is null)
+                {
+                    return OperationResult<UpdateOrderItemsQuantityResponse>.Failure(
+                        "No se pudo encontrado el producto en esta order"); 
+                }
 
                 var difference = item.Quantity - line.Quantity;
 
                 if(difference > 0 && difference > product.Stock)
                 {
-                    return OperationResult<UpdateOrderItemsQuantityResponse>.Failure($"No hay suficiente producto en stock para el producto{product.Name}");
+                    return OperationResult<UpdateOrderItemsQuantityResponse>.Failure(
+                        $"No hay suficiente producto en stock para el producto{product.Name}");
                 }
 
                 products[item.ProductId] = product;
-                quantityDifference[item.ProductId] = difference;
+                quantityDifference[item.ProductId] = checked((int)difference);
                 
             }
 
             foreach(var item in order.Items)
             {
-                if(!products.ContainsKey(item.ProductId))
-                {
+                if(products.ContainsKey(item.ProductId))
+                    continue;
+                
                     var product = await productsRepository.GetAsync(item.ProductId);
 
                     if(product is null)
@@ -77,13 +123,13 @@ public sealed class UpdateOrderItemQuantityUseCase(IOrderRepository orderReposit
                     }
 
                     products[item.ProductId] = product;
-                }
+                
 
             }
 
-            foreach(var item in unique)
+            foreach(var item in groupedItems)
             {
-                order.UpdateQuantity(item.ProductId, item.Quantity);
+                order.UpdateQuantity(item.ProductId, checked((int)item.Quantity));
 
                 if(quantityDifference[item.ProductId] < 0)
                 {
