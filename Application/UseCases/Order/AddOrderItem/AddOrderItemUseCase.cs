@@ -8,6 +8,7 @@ using Domain.Entities.Order;
 using Domain.Exceptions;
 using Domain.Entities.Product;
 using Domain.Entities.Order.Enums;
+using Microsoft.EntityFrameworkCore;
 
 namespace Application.UseCases.Order.AddOrderItem
 {
@@ -185,7 +186,18 @@ namespace Application.UseCases.Order.AddOrderItem
             order.AddItem(plannedItem.OrderItem);
             plannedItem.Product.DecreaseStock(plannedItem.Quantity);
         }
-        await unitOfWork.SaveChangesAsync();
+
+        try
+        {
+            await unitOfWork.SaveChangesAsync();
+        }
+        catch(DbUpdateConcurrencyException ex)
+        {
+            return OperationResult<AddOrderItemsResponse>.Failure(
+                "Ocurrió un error de concurrencia al actualizar la orden o el stock de los productos. " +
+                "Por favor, intente nuevamente.");
+        }
+
 #endregion
 
 #region Prepare Response

@@ -14,6 +14,9 @@ namespace Persistence.Configurations.OrderConfigurations
             builder.Property(o => o.TotalAmount).HasPrecision(18, 2);
             builder.Property(o => o.TotalProfit).HasPrecision(18, 2);
 
+            builder.Property(o => o.Version)
+                .IsRowVersion();
+
 
             builder.HasOne<Users>()
                 .WithMany()

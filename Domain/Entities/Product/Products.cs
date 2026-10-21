@@ -28,6 +28,8 @@ namespace Domain.Entities.Product
 
         public DateTimeOffset CreatedAt { get; private set; }
 
+        public byte[] Version { get; private set; } = [];
+
         // EF Core
         private Products() { }
 
@@ -62,6 +64,8 @@ namespace Domain.Entities.Product
 
         public void UpdateDetails(int categoryId, string name, string? description, string? imageUrl, decimal purchasePrice, decimal salePrice, int lowStockThreshold)
         {
+
+
             NormalizeFields(ref name, ref description, ref imageUrl);
 
             ValidateProductData(categoryId, name, purchasePrice, salePrice, lowStockThreshold);
@@ -77,9 +81,14 @@ namespace Domain.Entities.Product
 
         public void UpdateImage(string? imageUrl)
         {
-            ImageUrl = string.IsNullOrWhiteSpace(imageUrl)
+            var normalizedImageUrl = string.IsNullOrWhiteSpace(imageUrl)
                 ? null
                 : imageUrl.Trim();
+
+            if (ImageUrl == normalizedImageUrl)
+                return;
+
+            ImageUrl = normalizedImageUrl;
         }
 
         public void IncreaseStock(int quantity)
@@ -106,12 +115,20 @@ namespace Domain.Entities.Product
 
         public void Activate()
         {
+            if (IsActive)
+                return;
+
             IsActive = true;
+
         }
 
         public void Deactivate()
         {
+            if (!IsActive)
+                return;
+
             IsActive = false;
+
         }
 
         private static string GenerateSKU(string name, int categoryId)

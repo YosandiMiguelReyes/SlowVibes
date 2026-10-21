@@ -18,6 +18,7 @@ namespace Domain.Entities.Order
         public OrderSources OrderSource { get; private set; } 
         public DeliveryTypes DeliveryType { get; private set; } 
         public string? ShippingAddress { get; private set; } 
+        public byte[] Version { get; private set; } = [];
 
         private Orders(){}
 

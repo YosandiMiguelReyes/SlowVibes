@@ -7,6 +7,7 @@ using Application.Result;
 using Domain.Entities.Order.Enums;
 using Domain.Entities.Product;
 using Domain.Exceptions;
+using Microsoft.EntityFrameworkCore;
 
 namespace Application.UseCases.Order.UpdateQuantity;
 
@@ -140,6 +141,16 @@ public sealed class UpdateOrderItemQuantityUseCase(IOrderRepository orderReposit
                     products[item.ProductId].DecreaseStock(quantityDifference[item.ProductId]);
                 }
                 
+            }
+            try
+            {
+                await unitOfWork.SaveChangesAsync();
+            }
+            catch(DbUpdateConcurrencyException ex)
+            {
+                return OperationResult<UpdateOrderItemsQuantityResponse>.Failure(
+                    "Ocurrió un error de concurrencia al actualizar la orden o el stock de los productos. " +
+                    "Por favor, intente nuevamente.");
             }
             await unitOfWork.SaveChangesAsync();
 

@@ -6,6 +6,7 @@ using Application.DTOs.Order.Responses.RemoveOrderItem;
 using Application.Result;
 using Domain.Exceptions;
 using Domain.Entities.Product;
+using Microsoft.EntityFrameworkCore;
 
 namespace Application.UseCases.Order.RemoveOrderItem;
 
@@ -90,7 +91,16 @@ public sealed class RemoveOrderItemUseCase(IOrderRepository orderRepository,
             }
 
             orderRepository.Update(order);
-            await unitOfWork.SaveChangesAsync();
+            try
+            {
+                await unitOfWork.SaveChangesAsync();
+            }
+            catch(DbUpdateConcurrencyException ex)
+            {
+                return OperationResult<RemoveOrderItemsReponse>.Failure(
+                "Ocurrió un error de concurrencia al remover el item de la orden o el stock de los productos. " +
+                "Por favor, intente nuevamente.");
+            }
 
 
             var response = new RemoveOrderItemsReponse

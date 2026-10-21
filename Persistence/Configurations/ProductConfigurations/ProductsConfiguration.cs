@@ -17,6 +17,9 @@ namespace Persistence.Configurations.ProductConfigurations
             builder.Property(p => p.PurchasePrice).HasPrecision(18, 2);
             builder.Property(p => p.SalePrice).HasPrecision(18, 2);
 
+            builder.Property(p => p.Version)
+                .IsRowVersion();
+
             builder.HasOne<Categories>()
                 .WithMany()
                 .HasForeignKey(p => p.CategoryId)
