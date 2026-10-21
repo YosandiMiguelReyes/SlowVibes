@@ -69,7 +69,7 @@ public sealed class CreateOrderUseCaseTests
     }
 
     [Fact]
-    public async Task ExecuteAsync_WithNoItems_ThrowsDomainException()
+    public async Task ExecuteAsync_WithNoItems_ReturnsFailureResult()
     {
         var useCase = CreateUseCase(
             new Mock<IUserRepository>(),
@@ -80,11 +80,14 @@ public sealed class CreateOrderUseCaseTests
 
         var request = CreateValidRequest(productId: 10, quantity: 1) with { Items = [] };
 
-        await Assert.ThrowsAsync<DomainException>(() => useCase.ExecuteAsync(request));
+        var response = await useCase.ExecuteAsync(request);
+
+        Assert.True(response.IsFailure);
+        Assert.False(response.IsSuccess);
     }
 
     [Fact]
-    public async Task ExecuteAsync_WithInactiveUser_ThrowsDomainExceptionWithoutChangingStock()
+    public async Task ExecuteAsync_WithInactiveUser_ReturnsFailureResultWithoutChangingStock()
     {
         var user = CreateUser(id: 1);
         user.Deactivate();
@@ -99,9 +102,9 @@ public sealed class CreateOrderUseCaseTests
             new Mock<IOrderRepository>(),
             new Mock<IUnitOfWork>());
 
-        await Assert.ThrowsAsync<DomainException>(() =>
-            useCase.ExecuteAsync(CreateValidRequest(productId: 10, quantity: 1)));
+        var response = await useCase.ExecuteAsync(CreateValidRequest(productId: 10, quantity: 1));
 
+        Assert.True(response.IsFailure);
         productsRepository.Verify(repository => repository.GetAsync(It.IsAny<int>()), Times.Never);
     }
 
@@ -124,9 +127,9 @@ public sealed class CreateOrderUseCaseTests
             ordersRepository,
             unitOfWork);
 
-        await Assert.ThrowsAsync<DomainException>(() =>
-            useCase.ExecuteAsync(CreateValidRequest(product.Id, quantity: 3)));
+        var response = await useCase.ExecuteAsync(CreateValidRequest(product.Id, quantity: 3));
 
+        Assert.True(response.IsFailure);
         ordersRepository.Verify(repository => repository.AddAsync(It.IsAny<Orders>()), Times.Never);
         unitOfWork.Verify(work => work.SaveChangesAsync(), Times.Never);
     }
