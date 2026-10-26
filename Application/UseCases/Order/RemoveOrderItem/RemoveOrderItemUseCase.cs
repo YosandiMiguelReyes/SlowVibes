@@ -91,17 +91,7 @@ public sealed class RemoveOrderItemUseCase(IOrderRepository orderRepository,
             }
 
             orderRepository.Update(order);
-            try
-            {
-                await unitOfWork.SaveChangesAsync();
-            }
-            catch(DbUpdateConcurrencyException ex)
-            {
-                return OperationResult<RemoveOrderItemsReponse>.Failure(
-                "Ocurrió un error de concurrencia al remover el item de la orden o el stock de los productos. " +
-                "Por favor, intente nuevamente.");
-            }
-
+            await unitOfWork.SaveChangesAsync();
 
             var response = new RemoveOrderItemsReponse
             {

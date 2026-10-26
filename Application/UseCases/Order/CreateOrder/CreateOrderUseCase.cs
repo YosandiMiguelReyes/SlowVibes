@@ -104,17 +104,8 @@ public sealed class CreateOrderUseCase(
         }
 
         await orderRepository.AddAsync(order);
+        await unitOfWork.SaveChangesAsync();
 
-        try
-        {
-            await unitOfWork.SaveChangesAsync();
-        }
-        catch(DbUpdateConcurrencyException ex)
-        {
-            return OperationResult<CreateOrderResponse>.Failure(
-                "Ocurrió un error de concurrencia al crear la orden o el stock de los productos. " +
-                "Por favor, intente nuevamente.");
-        }
 
         var response = new CreateOrderResponse
         {

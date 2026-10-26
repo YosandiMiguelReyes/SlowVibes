@@ -186,17 +186,8 @@ namespace Application.UseCases.Order.AddOrderItem
             order.AddItem(plannedItem.OrderItem);
             plannedItem.Product.DecreaseStock(plannedItem.Quantity);
         }
-
-        try
-        {
             await unitOfWork.SaveChangesAsync();
-        }
-        catch(DbUpdateConcurrencyException ex)
-        {
-            return OperationResult<AddOrderItemsResponse>.Failure(
-                "Ocurrió un error de concurrencia al actualizar la orden o el stock de los productos. " +
-                "Por favor, intente nuevamente.");
-        }
+
 
 #endregion
 

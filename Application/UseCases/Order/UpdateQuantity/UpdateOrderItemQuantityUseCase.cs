@@ -142,17 +142,7 @@ public sealed class UpdateOrderItemQuantityUseCase(IOrderRepository orderReposit
                 }
                 
             }
-            try
-            {
                 await unitOfWork.SaveChangesAsync();
-            }
-            catch(DbUpdateConcurrencyException ex)
-            {
-                return OperationResult<UpdateOrderItemsQuantityResponse>.Failure(
-                    "Ocurrió un error de concurrencia al actualizar la orden o el stock de los productos. " +
-                    "Por favor, intente nuevamente.");
-            }
-            await unitOfWork.SaveChangesAsync();
 
             var response = new UpdateOrderItemsQuantityResponse
             {
